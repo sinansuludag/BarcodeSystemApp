@@ -1,0 +1,578 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DF8EA849-37E8-43DD-BB54-5CC8A3F0440E}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>BarkodluSatisProgrami1</RootNamespace>
+    <AssemblyName>BarkodluSatisProgrami1</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.1\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.HashCode, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.HashCode.1.1.1\lib\net461\Microsoft.Bcl.HashCode.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore.Abstractions, Version=3.1.32.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.EntityFrameworkCore.Abstractions.3.1.32\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Caching.Abstractions, Version=3.1.32.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Caching.Abstractions.3.1.32\lib\netstandard2.0\Microsoft.Extensions.Caching.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Caching.Memory, Version=3.1.32.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Caching.Memory.3.1.32\lib\netstandard2.0\Microsoft.Extensions.Caching.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration, Version=3.1.32.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.3.1.32\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=3.1.32.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Abstractions.3.1.32\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=3.1.32.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Binder.3.1.32\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=3.1.32.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.3.1.32\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=3.1.32.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.3.1.32\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging, Version=3.1.32.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.3.1.32\lib\netstandard2.0\Microsoft.Extensions.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=3.1.32.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.3.1.32\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Options, Version=3.1.32.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Options.3.1.32\lib\netstandard2.0\Microsoft.Extensions.Options.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=3.1.32.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Primitives.3.1.32\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.1620.0\lib\net40\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.DataVisualization, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.1620.0\lib\net40\Microsoft.ReportViewer.DataVisualization.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Design, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.1620.0\lib\net40\Microsoft.ReportViewer.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.1620.0\lib\net40\Microsoft.ReportViewer.ProcessingObjectModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebDesign, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.1620.0\lib\net40\Microsoft.ReportViewer.WebDesign.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.1620.0\lib\net40\Microsoft.ReportViewer.WebForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.1620.0\lib\net40\Microsoft.ReportViewer.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.14.0.314.76\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=1.2.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.7.1\lib\net461\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ComponentModel.Annotations.4.7.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.7.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.1\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Anasayfa.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Anasayfa.Designer.cs">
+      <DependentUpon>Anasayfa.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ayarlar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ayarlar.Designer.cs">
+      <DependentUpon>Ayarlar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Barkod.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DbBarkodDataSetGenelRapor.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DbBarkodDataSetGenelRapor.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DbBarkodDataSetStokIzleme.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DbBarkodDataSetStokIzleme.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DbBarkodDataSetUrunStok.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DbBarkodDataSetUrunStok.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DetayGoster.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DetayGoster.Designer.cs">
+      <DependentUpon>DetayGoster.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FiyatGuncelle.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FiyatGuncelle.Designer.cs">
+      <DependentUpon>FiyatGuncelle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GelirGider.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GelirGider.Designer.cs">
+      <DependentUpon>GelirGider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HizliButonUrunEkle.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HizliButonUrunEkle.Designer.cs">
+      <DependentUpon>HizliButonUrunEkle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HizliUrun.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Islem.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Islemler.cs" />
+    <Compile Include="IslemOzet.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Kullanici.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Model.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="NakitKart.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NakitKart.Designer.cs">
+      <DependentUpon>NakitKart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rapor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Rapor.Designer.cs">
+      <DependentUpon>Rapor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RaporGoster.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RaporGoster.Designer.cs">
+      <DependentUpon>RaporGoster.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Raporlar.cs" />
+    <Compile Include="Sabit.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Sati.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="fSatis.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="fSatis.Designer.cs">
+      <DependentUpon>fSatis.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stok.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Stok.Designer.cs">
+      <DependentUpon>Stok.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StokHareket.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Terazi.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Urun.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UrunGiris.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UrunGiris.Designer.cs">
+      <DependentUpon>UrunGiris.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UrunGrubuEkle.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UrunGrubuEkle.Designer.cs">
+      <DependentUpon>UrunGrubuEkle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UrunGrup.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Yazdir.cs" />
+    <EmbeddedResource Include="Anasayfa.resx">
+      <DependentUpon>Anasayfa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ayarlar.resx">
+      <DependentUpon>Ayarlar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DetayGoster.resx">
+      <DependentUpon>DetayGoster.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FiyatGuncelle.resx">
+      <DependentUpon>FiyatGuncelle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GelirGider.resx">
+      <DependentUpon>GelirGider.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HizliButonUrunEkle.resx">
+      <DependentUpon>HizliButonUrunEkle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NakitKart.resx">
+      <DependentUpon>NakitKart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="Rapor.resx">
+      <DependentUpon>Rapor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RaporGoster.resx">
+      <DependentUpon>RaporGoster.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="rpGenelRapor.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="rpStokIzleme.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="rpStokUrun.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="fSatis.resx">
+      <DependentUpon>fSatis.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stok.resx">
+      <DependentUpon>Stok.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UrunGiris.resx">
+      <DependentUpon>UrunGiris.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UrunGrubuEkle.resx">
+      <DependentUpon>UrunGrubuEkle.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="DbBarkodDataSetGenelRapor.xsc">
+      <DependentUpon>DbBarkodDataSetGenelRapor.xsd</DependentUpon>
+    </None>
+    <None Include="DbBarkodDataSetGenelRapor.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DbBarkodDataSetGenelRapor.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DbBarkodDataSetGenelRapor.xss">
+      <DependentUpon>DbBarkodDataSetGenelRapor.xsd</DependentUpon>
+    </None>
+    <None Include="DbBarkodDataSetStokIzleme.xsc">
+      <DependentUpon>DbBarkodDataSetStokIzleme.xsd</DependentUpon>
+    </None>
+    <None Include="DbBarkodDataSetStokIzleme.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DbBarkodDataSetStokIzleme.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DbBarkodDataSetStokIzleme.xss">
+      <DependentUpon>DbBarkodDataSetStokIzleme.xsd</DependentUpon>
+    </None>
+    <None Include="DbBarkodDataSetUrunStok.xsc">
+      <DependentUpon>DbBarkodDataSetUrunStok.xsd</DependentUpon>
+    </None>
+    <None Include="DbBarkodDataSetUrunStok.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DbBarkodDataSetUrunStok.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DbBarkodDataSetUrunStok.xss">
+      <DependentUpon>DbBarkodDataSetUrunStok.xsd</DependentUpon>
+    </None>
+    <EntityDeploy Include="Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Model.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Model.edmx.diagram">
+      <DependentUpon>Model.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ara32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ara2424.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ara3232.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\backup4854.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\barcode4832.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cancel24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\clear4848.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\defaultimage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\duzenle32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ekle20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ekle24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ekle32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\enter-arrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Excel32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\excel4854.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\exit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\exit32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\exit4854.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fiyatguncelletl4854.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\goz24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\kartnakit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\kartnakit1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\kredikarti.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\kredikarti1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\kullanicidegistir32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\login.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\printer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\printer256.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\rapor4854.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\remove.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\remove1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\restore4854.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\satisyap4854.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\save24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\scan-barcode-with-scanner-tool.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\settings4854.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\shuffle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\stok4854.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tl_32_b.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tl_48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tl_481.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tl4854.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tlBeyaz32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\urungiris4854.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model.edmx</DependentUpon>
+      <LastGenOutput>Model.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model.edmx</DependentUpon>
+      <LastGenOutput>Model.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+</Project>
