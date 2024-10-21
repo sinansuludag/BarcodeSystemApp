@@ -1,0 +1,3 @@
+﻿BLL=> Bussiness Logic Layer
+DLL=> Database Logic Layer
+
