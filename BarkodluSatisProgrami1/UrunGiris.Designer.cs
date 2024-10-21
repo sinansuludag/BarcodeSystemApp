@@ -498,6 +498,7 @@
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black;
             this.gridUrunler.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.gridUrunler.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.gridUrunler.Size = new System.Drawing.Size(1016, 230);
             this.gridUrunler.TabIndex = 2;
             this.gridUrunler.TabStop = false;

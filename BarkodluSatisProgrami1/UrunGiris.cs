@@ -255,8 +255,8 @@ namespace BarkodluSatisProgrami1
                 txtUrunAdi.Text= gridUrunler.CurrentRow.Cells["UrunAd"].Value.ToString();
                 txtAciklama.Text= gridUrunler.CurrentRow.Cells["Aciklama"].Value.ToString();
                 cbUrunGrubu.Text= gridUrunler.CurrentRow.Cells["UrunGrup"].Value.ToString();
-                txtAlisFiyati.Text= gridUrunler.CurrentRow.Cells["AlisFiyat"].Value.ToString();
-                txtSatisFiyati.Text= gridUrunler.CurrentRow.Cells["SatisFiyat"].Value.ToString();
+                txtAlisFiyati.Text= gridUrunler.CurrentRow.Cells["AlisFiyati"].Value.ToString();
+                txtSatisFiyati.Text= gridUrunler.CurrentRow.Cells["SatisFiyati"].Value.ToString();
                 txtKdvOrani.Text= gridUrunler.CurrentRow.Cells["KdvOrani"].Value.ToString();
                 txtMiktar.Text= gridUrunler.CurrentRow.Cells["Miktar"].Value.ToString();
                 string birim= gridUrunler.CurrentRow.Cells["Birim"].Value.ToString();

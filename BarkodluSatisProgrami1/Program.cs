@@ -1,4 +1,4 @@
-﻿using BarkodluSatisProgrami1;
+using BarkodluSatisProgrami1;
 using System;
 using System.Collections.Generic;
 using System.Linq;
