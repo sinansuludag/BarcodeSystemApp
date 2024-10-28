@@ -1,0 +1,9 @@
+C:\Users\resul\source\repos\BarcodeSystemApp\BarkodluSatis.BLL\bin\Debug\BarkodluSatis.BLL.dll
+C:\Users\resul\source\repos\BarcodeSystemApp\BarkodluSatis.BLL\bin\Debug\BarkodluSatis.BLL.pdb
+C:\Users\resul\source\repos\BarcodeSystemApp\BarkodluSatis.BLL\bin\Debug\BarkodluSatis.DLL.dll
+C:\Users\resul\source\repos\BarcodeSystemApp\BarkodluSatis.BLL\bin\Debug\BarkodluSatis.DLL.pdb
+C:\Users\resul\source\repos\BarcodeSystemApp\BarkodluSatis.BLL\obj\Debug\BarkodluSatis.BLL.csproj.AssemblyReference.cache
+C:\Users\resul\source\repos\BarcodeSystemApp\BarkodluSatis.BLL\obj\Debug\BarkodluSatis.BLL.csproj.CoreCompileInputs.cache
+C:\Users\resul\source\repos\BarcodeSystemApp\BarkodluSatis.BLL\obj\Debug\BarkodluSatis.BLL.csproj.CopyComplete
+C:\Users\resul\source\repos\BarcodeSystemApp\BarkodluSatis.BLL\obj\Debug\BarkodluSatis.BLL.dll
+C:\Users\resul\source\repos\BarcodeSystemApp\BarkodluSatis.BLL\obj\Debug\BarkodluSatis.BLL.pdb
