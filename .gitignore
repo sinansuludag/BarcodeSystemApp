@@ -361,3 +361,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/BarkodluSatis.BLL/obj/Debug/BarkodluSatis.BLL.csproj.AssemblyReference.cache
