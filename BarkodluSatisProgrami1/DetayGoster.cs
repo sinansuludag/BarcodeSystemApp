@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BarkodluSatisProgrami1.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -24,7 +25,7 @@ namespace BarkodluSatisProgrami1
             lblIslemNo.Text = islemno.ToString();
             using(var db=new DbBarkodEntities())
             {
-                gridListe.DataSource = db.Satis.Select(a=> new {a.IslemNo,a.UrunAd,a.UrunGrup,a.Miktar,a.Toplam}).Where(x => x.IslemNo == islemno).ToList();
+                gridListe.DataSource = db.Satiss.Select(a=> new {a.IslemNo,a.UrunAd,a.UrunGrup,a.Miktar,a.Toplam}).Where(x => x.IslemNo == islemno).ToList();
                 Islemler.GridDuzenle(gridListe);
             }
         }

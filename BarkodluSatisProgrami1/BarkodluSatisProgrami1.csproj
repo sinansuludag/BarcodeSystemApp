@@ -161,7 +161,7 @@
     <Compile Include="Ayarlar.Designer.cs">
       <DependentUpon>Ayarlar.cs</DependentUpon>
     </Compile>
-    <Compile Include="Barkod.cs">
+    <Compile Include="Models\Barkod.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="DbBarkodDataSetGenelRapor.Designer.cs">
@@ -203,17 +203,17 @@
     <Compile Include="HizliButonUrunEkle.Designer.cs">
       <DependentUpon>HizliButonUrunEkle.cs</DependentUpon>
     </Compile>
-    <Compile Include="HizliUrun.cs">
+    <Compile Include="Models\HizliUrun.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Islem.cs">
+    <Compile Include="Models\Islem.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Islemler.cs" />
-    <Compile Include="IslemOzet.cs">
+    <Compile Include="Models\IslemOzet.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Kullanici.cs">
+    <Compile Include="Models\Kullanici.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Login.cs">
@@ -222,17 +222,17 @@
     <Compile Include="Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model.Context.cs">
+    <Compile Include="Models\Model.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Model.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Model.cs">
+    <Compile Include="Models\Model.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Model.Designer.cs">
+    <Compile Include="Models\Model.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Model.edmx</DependentUpon>
@@ -258,17 +258,17 @@
       <DependentUpon>RaporGoster.cs</DependentUpon>
     </Compile>
     <Compile Include="Raporlar.cs" />
-    <Compile Include="Sabit.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Sati.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="fSatis.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="fSatis.Designer.cs">
       <DependentUpon>fSatis.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Sabit.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Satis.cs">
+      <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Stok.cs">
       <SubType>Form</SubType>
@@ -276,13 +276,13 @@
     <Compile Include="Stok.Designer.cs">
       <DependentUpon>Stok.cs</DependentUpon>
     </Compile>
-    <Compile Include="StokHareket.cs">
+    <Compile Include="Models\StokHareket.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Terazi.cs">
+    <Compile Include="Models\Terazi.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Urun.cs">
+    <Compile Include="Models\Urun.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="UrunGiris.cs">
@@ -297,7 +297,7 @@
     <Compile Include="UrunGrubuEkle.Designer.cs">
       <DependentUpon>UrunGrubuEkle.cs</DependentUpon>
     </Compile>
-    <Compile Include="UrunGrup.cs">
+    <Compile Include="Models\UrunGrup.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Yazdir.cs" />
@@ -395,11 +395,11 @@
     <None Include="DbBarkodDataSetUrunStok.xss">
       <DependentUpon>DbBarkodDataSetUrunStok.xsd</DependentUpon>
     </None>
-    <EntityDeploy Include="Model.edmx">
+    <EntityDeploy Include="Models\Model.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="Model.edmx.diagram">
+    <None Include="Models\Model.edmx.diagram">
       <DependentUpon>Model.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
@@ -552,22 +552,22 @@
     <None Include="Resources\urungiris4854.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Model.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model.edmx</DependentUpon>
-      <LastGenOutput>Model.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Model.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model.edmx</DependentUpon>
-      <LastGenOutput>Model.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Components\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Models\Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model.edmx</DependentUpon>
+      <LastGenOutput>Model.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model.edmx</DependentUpon>
+      <LastGenOutput>Model.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

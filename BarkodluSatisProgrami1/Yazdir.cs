@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BarkodluSatisProgrami1.Models;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
@@ -37,7 +38,7 @@ namespace BarkodluSatisProgrami1
         {
             DbBarkodEntities db= new DbBarkodEntities();
             var isyeri = db.Sabits.FirstOrDefault();
-            var liste = db.Satis.Where(x => x.IslemNo == IslemNo).ToList();
+            var liste = db.Satiss.Where(x => x.IslemNo == IslemNo).ToList();
             if(isyeri != null && liste!=null)
             {
                 int kagitUzunluk = 120;

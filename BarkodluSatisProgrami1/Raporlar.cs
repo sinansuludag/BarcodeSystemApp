@@ -1,4 +1,5 @@
-﻿using Microsoft.Reporting.WinForms;
+﻿using BarkodluSatisProgrami1.Models;
+using Microsoft.Reporting.WinForms;
 using System;
 using System.Collections.Generic;
 using System.Linq;

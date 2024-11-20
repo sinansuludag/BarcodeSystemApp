@@ -1,0 +1,12 @@
+D:\CsharpProjects\BarkodluSatisProgrami1\BarkodluSatis.DLL\bin\Debug\BarkodluSatis.DLL.dll
+D:\CsharpProjects\BarkodluSatisProgrami1\BarkodluSatis.DLL\bin\Debug\BarkodluSatis.DLL.pdb
+D:\CsharpProjects\BarkodluSatisProgrami1\BarkodluSatis.DLL\obj\Debug\BarkodluSatis.DLL.csproj.AssemblyReference.cache
+D:\CsharpProjects\BarkodluSatisProgrami1\BarkodluSatis.DLL\obj\Debug\BarkodluSatis.DLL.csproj.CoreCompileInputs.cache
+D:\CsharpProjects\BarkodluSatisProgrami1\BarkodluSatis.DLL\obj\Debug\BarkodluSatis.DLL.dll
+D:\CsharpProjects\BarkodluSatisProgrami1\BarkodluSatis.DLL\obj\Debug\BarkodluSatis.DLL.pdb
+D:\CsharpProjects\BarkodluSatisProgrami1\BarkodluSatis.DLL\bin\Debug\BarkodluSatis.DLL.dll.config
+D:\CsharpProjects\BarkodluSatisProgrami1\BarkodluSatis.DLL\bin\Debug\EntityFramework.dll
+D:\CsharpProjects\BarkodluSatisProgrami1\BarkodluSatis.DLL\bin\Debug\EntityFramework.SqlServer.dll
+D:\CsharpProjects\BarkodluSatisProgrami1\BarkodluSatis.DLL\bin\Debug\EntityFramework.xml
+D:\CsharpProjects\BarkodluSatisProgrami1\BarkodluSatis.DLL\bin\Debug\EntityFramework.SqlServer.xml
+D:\CsharpProjects\BarkodluSatisProgrami1\BarkodluSatis.DLL\obj\Debug\Barkodlu.95E3DD59.Up2Date

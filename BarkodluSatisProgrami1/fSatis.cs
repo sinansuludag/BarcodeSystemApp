@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using BarkodluSatisProgrami1.Models;
 
 
 namespace BarkodluSatisProgrami1
@@ -369,7 +370,7 @@ namespace BarkodluSatisProgrami1
             if (satirSayisi > 0)
             {
                 int? islemNo = db.Islems.First().IslemNo;
-                Sati satis = new Sati();
+                Satis satis = new Satis();
                 for(int i = 0; i < satirSayisi; i++)
                 {
                     satis.IslemNo = islemNo;
@@ -386,7 +387,7 @@ namespace BarkodluSatisProgrami1
                     satis.Iade = satisIade;
                     satis.Tarih = DateTime.Now;
                     satis.Kullanici = lblKullanici.Text;
-                    db.Satis.Add(satis);
+                    db.Satiss.Add(satis);
                     db.SaveChanges();
                     if (!satisIade)
                     {

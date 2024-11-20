@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace BarkodluSatis.DLL.IConcrete
 {
-    public interface IBarkod
+    public interface IBarkod<T>:IRepository<T> where T : class
     {
-        string  BarkodKaydet(string barkodNo);//Camel
-        //Delete, update, list,find, get,....
-
 
     }
 }

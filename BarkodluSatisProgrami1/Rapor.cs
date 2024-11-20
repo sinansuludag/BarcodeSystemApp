@@ -1,4 +1,5 @@
 ﻿using BarkodluSatisProgrami1;
+using BarkodluSatisProgrami1.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -83,8 +84,8 @@ namespace BarkodluSatisProgrami1
                     txtGiderNakit.Text = Convert.ToDouble(islemOzet.Where(x => x.Gider == true).Sum(x => x.Nakit)).ToString("C2");
                     txtGiderKart.Text = Convert.ToDouble(islemOzet.Where(x => x.Gider == true).Sum(x => x.Kart)).ToString("C2");
 
-                    db.Satis.Where(x => x.Tarih >= baslangic && x.Tarih <= bitis).Load();
-                    var satisTablosu = db.Satis.Local.ToBindingList();
+                    db.Satiss.Where(x => x.Tarih >= baslangic && x.Tarih <= bitis).Load();
+                    var satisTablosu = db.Satiss.Local.ToBindingList();
                     double kdvTutariSatis = Islemler.DoubleYap(satisTablosu.Where(x => x.Iade == false).Sum(x => x.KdvTutari).ToString());
                     double kdvTutariIade = Islemler.DoubleYap(satisTablosu.Where(x => x.Iade == true).Sum(x => x.KdvTutari).ToString());
                     txtKdvtoplam.Text = (kdvTutariSatis - kdvTutariIade).ToString("C2");

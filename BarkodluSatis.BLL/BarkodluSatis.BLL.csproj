@@ -42,12 +42,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Concrete\BarkodRepository.cs" />
+    <Compile Include="Concrete\HizliUrunRepository.cs" />
+    <Compile Include="Concrete\IslemOzetRepository.cs" />
+    <Compile Include="Concrete\IslemRepository.cs" />
+    <Compile Include="Concrete\KullaniciRepository.cs" />
+    <Compile Include="Concrete\RepositoryBase.cs" />
+    <Compile Include="Concrete\SabitRepository.cs" />
+    <Compile Include="Concrete\SatisRepository.cs" />
+    <Compile Include="Concrete\StokHareketRepository.cs" />
+    <Compile Include="Concrete\TeraziRepository.cs" />
+    <Compile Include="Concrete\UrunGrupRepository.cs" />
+    <Compile Include="Concrete\UrunRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BarkodluSatis.DLL\BarkodluSatis.DLL.csproj">
       <Project>{c4972545-4602-4684-a021-af79efada376}</Project>
       <Name>BarkodluSatis.DLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BarkodluSatisProgrami1\BarkodluSatisProgrami1.csproj">
+      <Project>{df8ea849-37e8-43dd-bb54-5cc8a3f0440e}</Project>
+      <Name>BarkodluSatisProgrami1</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
