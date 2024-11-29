@@ -206,13 +206,14 @@ namespace BarkodluSatisProgrami1
             }
         }
 
-        private void UrunGiris_Load(object sender, EventArgs e)
+        private async void UrunGiris_Load(object sender, EventArgs e)
         {
             UrunAPI urunAPI = new UrunAPI();
-            var urunList = urunAPI.UrunList();
+            var urunList =await urunAPI.UrunList();
 
-            txtUrunSayisi.Text=db.Uruns.Count().ToString();
-            gridUrunler.DataSource = db.Uruns.OrderByDescending(a => a.UrunId).Take(20).ToList();
+            txtUrunSayisi.Text=urunList.Count.ToString();
+            //gridUrunler.DataSource = db.Uruns.OrderByDescending(a => a.UrunId).Take(20).ToList();
+            gridUrunler.DataSource = urunList;
             Islemler.GridDuzenle(gridUrunler) ;
             GrupDoldur();
         }
