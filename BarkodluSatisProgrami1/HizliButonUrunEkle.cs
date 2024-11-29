@@ -81,5 +81,10 @@ namespace BarkodluSatisProgrami1
         {
 
         }
+
+        private void gridUrunler_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

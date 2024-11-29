@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using BarkodluSatisProgrami1.Models;
+using BarkodluSatisProgrami1.APIService;
 
 namespace BarkodluSatisProgrami1
 {
@@ -207,6 +208,9 @@ namespace BarkodluSatisProgrami1
 
         private void UrunGiris_Load(object sender, EventArgs e)
         {
+            UrunAPI urunAPI = new UrunAPI();
+            var urunList = urunAPI.UrunList();
+
             txtUrunSayisi.Text=db.Uruns.Count().ToString();
             gridUrunler.DataSource = db.Uruns.OrderByDescending(a => a.UrunId).Take(20).ToList();
             Islemler.GridDuzenle(gridUrunler) ;
