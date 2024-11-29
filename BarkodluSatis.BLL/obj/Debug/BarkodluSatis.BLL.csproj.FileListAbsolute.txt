@@ -1,2 +1,0 @@
-D:\CsharpProjects\BarkodluSatisProgrami1\BarkodluSatis.BLL\obj\Debug\BarkodluSatis.BLL.csproj.AssemblyReference.cache
-D:\CsharpProjects\BarkodluSatisProgrami1\BarkodluSatis.BLL\obj\Debug\BarkodluSatis.BLL.csproj.CoreCompileInputs.cache
