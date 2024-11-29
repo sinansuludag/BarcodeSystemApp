@@ -56,10 +56,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BarkodluSatis.DLL\BarkodluSatis.DLL.csproj">
-      <Project>{c4972545-4602-4684-a021-af79efada376}</Project>
-      <Name>BarkodluSatis.DLL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\BarkodluSatisProgrami1\BarkodluSatisProgrami1.csproj">
       <Project>{df8ea849-37e8-43dd-bb54-5cc8a3f0440e}</Project>
       <Name>BarkodluSatisProgrami1</Name>
