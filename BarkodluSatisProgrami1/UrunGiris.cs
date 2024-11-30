@@ -10,14 +10,17 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using BarkodluSatisProgrami1.Models;
 using BarkodluSatisProgrami1.APIService;
+using BarkodluSatisProgrami1.Models.FormDTO;
 
 namespace BarkodluSatisProgrami1
 {
     public partial class UrunGiris : Form
     {
+        UrunAPI urunAPI;
         public UrunGiris()
         {
             InitializeComponent();
+            urunAPI = new UrunAPI();
         }
 
         DbBarkodEntities db=new DbBarkodEntities();
@@ -93,7 +96,7 @@ namespace BarkodluSatisProgrami1
             }
         }
 
-        private void silToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void silToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if(gridUrunler.Rows.Count > 0)
             {
@@ -103,17 +106,19 @@ namespace BarkodluSatisProgrami1
                 DialogResult dialog = MessageBox.Show(urunAd + " ürününü silmek istiyor musunuz?", "Ürün silme işlemi", MessageBoxButtons.YesNo);
                 if (dialog == DialogResult.Yes)
                 {
-                    var urun = db.Uruns.Find(urunId);
-                    db.Uruns.Remove(urun);
-                    db.SaveChanges();
-                    var hizliUrun = db.HizliUruns.Where(a => a.Barkod == barkod).SingleOrDefault();
-                    hizliUrun.Barkod = "-";
-                    hizliUrun.UrunAd = "-";
-                    hizliUrun.Fiyat = 0;
-                    db.SaveChanges();
+                    //var urun = db.Uruns.Find(urunId);
+                    //db.Uruns.Remove(urun);
+                    //db.SaveChanges();
+                    await urunAPI.UrunSil(urunId);
+                    //var hizliUrun = db.HizliUruns.Where(a => a.Barkod == barkod).SingleOrDefault();
+                    //hizliUrun.Barkod = "-";
+                    //hizliUrun.UrunAd = "-";
+                    //hizliUrun.Fiyat = 0;
+                    //db.SaveChanges();
 
                     MessageBox.Show("Ürün silinmiştir");
-                    gridUrunler.DataSource = db.Uruns.OrderByDescending(a => a.UrunId).Take(20).ToList();
+                    //gridUrunler.DataSource = db.Uruns.OrderByDescending(a => a.UrunId).Take(20).ToList();
+                    gridUrunler.DataSource =await urunAPI.UrunList();
                     Islemler.GridDuzenle(gridUrunler);
                     txtUrunGirisBarkod.Focus();
                 }
@@ -121,13 +126,14 @@ namespace BarkodluSatisProgrami1
             
         }
 
-        private void btnKaydet_Click(object sender, EventArgs e)
+        private async void btnKaydet_Click(object sender, EventArgs e)
         {
             if (txtUrunGirisBarkod.Text != "" && txtUrunAdi.Text != "" && cbUrunGrubu.Text != "" && txtAlisFiyati.Text != "" && txtSatisFiyati.Text != "" && txtKdvOrani.Text != "" && txtMiktar.Text != "")
             {
-                if (db.Uruns.Any(a => a.Barkod == txtUrunGirisBarkod.Text))
+                var uruns=await urunAPI.UrunList();
+                if (uruns.Any(a => a.Barkod == txtUrunGirisBarkod.Text))
                 {
-                    var guncelle = db.Uruns.Where(a => a.Barkod == txtUrunGirisBarkod.Text).SingleOrDefault();
+                    var guncelle = uruns.Where(a => a.Barkod == txtUrunGirisBarkod.Text).SingleOrDefault();
                     guncelle.UrunAd = txtUrunAdi.Text;
                     guncelle.Aciklama = txtAciklama.Text;
                     guncelle.UrunGrup = cbUrunGrubu.Text;
@@ -146,14 +152,16 @@ namespace BarkodluSatisProgrami1
                     }
                     guncelle.Tarih = DateTime.Now;
                     guncelle.Kullanici = lblKullanici.Text;
-                    db.SaveChanges();
+                    //db.SaveChanges();
+                    await urunAPI.UrunGuncelle(guncelle.UrunId,guncelle);
                     MessageBox.Show("Ürün güncellenmiştir");
-                    gridUrunler.DataSource = db.Uruns.OrderByDescending(a => a.UrunId).Take(10).ToList();
+                    //gridUrunler.DataSource = db.Uruns.OrderByDescending(a => a.UrunId).Take(10).ToList();
+                    gridUrunler.DataSource =await urunAPI.UrunList();
 
                 }
                 else
                 {
-                    Urun urun = new Urun();
+                    UrunDTO urun = new UrunDTO();
                     urun.Barkod = txtUrunGirisBarkod.Text;
                     urun.UrunAd = txtUrunAdi.Text;
                     urun.Aciklama = txtAciklama.Text;
@@ -173,8 +181,9 @@ namespace BarkodluSatisProgrami1
                     }
                     urun.Tarih = DateTime.Now;
                     urun.Kullanici = lblKullanici.Text;
-                    db.Uruns.Add(urun);
-                    db.SaveChanges();
+                    //db.Uruns.Add(urun);
+                    //db.SaveChanges();
+                   await urunAPI.UrunEkle(urun);
                     MessageBox.Show("Ürün eklenmiştir.");
                     if (txtUrunGirisBarkod.Text.Length == 8)
                     {
@@ -183,7 +192,8 @@ namespace BarkodluSatisProgrami1
                         db.SaveChanges();
                     }
 
-                    gridUrunler.DataSource = db.Uruns.OrderByDescending(a => a.UrunId).Take(20).ToList();
+                    //gridUrunler.DataSource = db.Uruns.OrderByDescending(a => a.UrunId).Take(20).ToList();
+                    gridUrunler.DataSource =await urunAPI.UrunList();
                     Islemler.GridDuzenle(gridUrunler);
                 }
                 Islemler.StokHareket(txtUrunGirisBarkod.Text, txtUrunAdi.Text, "Adet", Convert.ToDouble(txtMiktar.Text), cbUrunGrubu.Text, lblKullanici.Text);
@@ -208,7 +218,7 @@ namespace BarkodluSatisProgrami1
 
         private async void UrunGiris_Load(object sender, EventArgs e)
         {
-            UrunAPI urunAPI = new UrunAPI();
+           
             var urunList =await urunAPI.UrunList();
 
             txtUrunSayisi.Text=urunList.Count.ToString();

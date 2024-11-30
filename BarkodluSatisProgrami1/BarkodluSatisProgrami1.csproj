@@ -171,6 +171,7 @@
     <Compile Include="Anasayfa.Designer.cs">
       <DependentUpon>Anasayfa.cs</DependentUpon>
     </Compile>
+    <Compile Include="APIService\APIServices.cs" />
     <Compile Include="APIService\BarkodAPI.cs" />
     <Compile Include="APIService\UrunAPI.cs" />
     <Compile Include="Ayarlar.cs">
