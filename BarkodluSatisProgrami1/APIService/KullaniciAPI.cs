@@ -1,27 +1,24 @@
-﻿using BarkodluSatisProgrami1.Models;
-using BarkodluSatisProgrami1.Models.FormDTO;
+﻿using BarkodluSatisProgrami1.Models.FormDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace BarkodluSatisProgrami1.APIService
 {
-    public class BarkodAPI
+    public class KullaniciAPI
     {
-        private readonly ApiServices<BarkodDTO> _apiService;
+        private readonly ApiServices<KullaniciDTO> _apiService;
 
-        public BarkodAPI()
+        public KullaniciAPI()
         {
-            _apiService = new ApiServices<BarkodDTO>();
+            _apiService = new ApiServices<KullaniciDTO>();
         }
 
-        public async Task<List<BarkodDTO>> BarkodList()
+        public async Task<List<KullaniciDTO>> KullaniciList()
         {
-            string apiUrl = "https://localhost:7109/api/Barkod/BarkodList";
+            string apiUrl = "https://localhost:7109/api/Kullanici/KullaniciList";
             var response = await _apiService.GetList(apiUrl);
 
             if (response.IsSuccess)
@@ -32,9 +29,9 @@ namespace BarkodluSatisProgrami1.APIService
             throw new Exception($"Hata :{response.ErrorMessage}");
         }
 
-        public async Task<BarkodDTO> BarkodGetById(int id)
+        public async Task<KullaniciDTO> KullaniciGetById(int id)
         {
-            string apiUrl = "https://localhost:7109/api/Barkod";
+            string apiUrl = "https://localhost:7109/api/Kullanici";
             var response = await _apiService.GetById(apiUrl, id);
 
             if (response.IsSuccess)
@@ -45,10 +42,10 @@ namespace BarkodluSatisProgrami1.APIService
             throw new Exception($"Hata :{response.ErrorMessage}");
         }
 
-        public async Task<bool> BarkodAdd(BarkodDTO barkod)
+        public async Task<bool> KullaniciAdd(KullaniciDTO kullanici)
         {
-            string apiUrl = "https://localhost:7109/api/Barkod/BarkodAdd";
-            var response = await _apiService.Add(apiUrl, barkod);
+            string apiUrl = "https://localhost:7109/api/Kullanici/KullaniciAdd";
+            var response = await _apiService.Add(apiUrl, kullanici);
 
             if (response.IsSuccess)
             {
@@ -58,10 +55,10 @@ namespace BarkodluSatisProgrami1.APIService
             throw new Exception($"Hata :{response.ErrorMessage}");
         }
 
-        public async Task<bool> BarkodUpdate(int id, BarkodDTO barkod)
+        public async Task<bool> KullaniciUpdate(int id, KullaniciDTO kullanici)
         {
-            string apiUrl = "https://localhost:7109/api/Barkod";
-            var response = await _apiService.Update(apiUrl, id, barkod);
+            string apiUrl = "https://localhost:7109/api/Kullanici";
+            var response = await _apiService.Update(apiUrl, id, kullanici);
 
             if (response.IsSuccess)
             {
@@ -71,9 +68,9 @@ namespace BarkodluSatisProgrami1.APIService
             throw new Exception($"Hata :{response.ErrorMessage}");
         }
 
-        public async Task<bool> BarkodDelete(int id)
+        public async Task<bool> KullaniciDelete(int id)
         {
-            string apiUrl = "https://localhost:7109/api/Barkod";
+            string apiUrl = "https://localhost:7109/api/Kullanici";
             var response = await _apiService.Delete(apiUrl, id);
 
             if (response.IsSuccess)
@@ -83,5 +80,4 @@ namespace BarkodluSatisProgrami1.APIService
             throw new Exception($"Hata :{response.ErrorMessage}");
         }
     }
-
 }

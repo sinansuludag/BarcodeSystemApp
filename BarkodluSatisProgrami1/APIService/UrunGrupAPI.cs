@@ -1,27 +1,25 @@
-﻿using BarkodluSatisProgrami1.Models;
-using BarkodluSatisProgrami1.Models.FormDTO;
-using Newtonsoft.Json;
+﻿using BarkodluSatisProgrami1.Models.FormDTO;
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace BarkodluSatisProgrami1.APIService
 {
-    public class UrunAPI
+    public class UrunGrupAPI
     {
-        private readonly ApiServices<UrunDTO> _apiService;
+        private readonly ApiServices<UrunGrupDTO> _apiService;
 
-        public UrunAPI()
+        public UrunGrupAPI()
         {
-            _apiService = new ApiServices<UrunDTO>();
+            _apiService = new ApiServices<UrunGrupDTO>();
         }
 
-        public async Task<List<UrunDTO>> UrunList()
+        public async Task<List<UrunGrupDTO>> UrunGrupList()
         {
-            string apiUrl = "https://localhost:7109/api/Urun/UrunList";
-            var response= await _apiService.GetList(apiUrl);
+            string apiUrl = "https://localhost:7109/api/UrunGrup/UrunGrupList";
+            var response = await _apiService.GetList(apiUrl);
 
             if (response.IsSuccess)
             {
@@ -31,10 +29,10 @@ namespace BarkodluSatisProgrami1.APIService
             throw new Exception($"Hata :{response.ErrorMessage}");
         }
 
-        public async Task<UrunDTO> UrunGetById(int id)
+        public async Task<UrunGrupDTO> UrunGrupGetById(int id)
         {
-            string apiUrl = "https://localhost:7109/api/Urun";
-            var response= await _apiService.GetById(apiUrl, id);
+            string apiUrl = "https://localhost:7109/api/UrunGrup";
+            var response = await _apiService.GetById(apiUrl, id);
 
             if (response.IsSuccess)
             {
@@ -44,10 +42,10 @@ namespace BarkodluSatisProgrami1.APIService
             throw new Exception($"Hata :{response.ErrorMessage}");
         }
 
-        public async Task<bool> UrunAdd(UrunDTO urun)
+        public async Task<bool> UrunGrupAdd(UrunGrupDTO urunGrup)
         {
-            string apiUrl = "https://localhost:7109/api/Urun/UrunAdd";
-            var response= await _apiService.Add(apiUrl, urun);
+            string apiUrl = "https://localhost:7109/api/UrunGrup/UrunGrupAdd";
+            var response = await _apiService.Add(apiUrl, urunGrup);
 
             if (response.IsSuccess)
             {
@@ -57,10 +55,10 @@ namespace BarkodluSatisProgrami1.APIService
             throw new Exception($"Hata :{response.ErrorMessage}");
         }
 
-        public async Task<bool> UrunUpdate(int id, UrunDTO urun)
+        public async Task<bool> UrunGrupUpdate(int id, UrunGrupDTO urunGrup)
         {
-            string apiUrl = "https://localhost:7109/api/Urun";
-            var response= await _apiService.Update(apiUrl, id, urun);
+            string apiUrl = "https://localhost:7109/api/UrunGrup";
+            var response = await _apiService.Update(apiUrl, id, urunGrup);
 
             if (response.IsSuccess)
             {
@@ -70,9 +68,9 @@ namespace BarkodluSatisProgrami1.APIService
             throw new Exception($"Hata :{response.ErrorMessage}");
         }
 
-        public async Task<bool> UrunDelete(int id)
+        public async Task<bool> UrunGrupDelete(int id)
         {
-            string apiUrl = "https://localhost:7109/api/Urun";
+            string apiUrl = "https://localhost:7109/api/UrunGrup";
             var response = await _apiService.Delete(apiUrl, id);
 
             if (response.IsSuccess)
@@ -82,5 +80,4 @@ namespace BarkodluSatisProgrami1.APIService
             throw new Exception($"Hata :{response.ErrorMessage}");
         }
     }
-
 }

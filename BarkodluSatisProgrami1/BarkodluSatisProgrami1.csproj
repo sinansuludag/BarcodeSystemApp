@@ -171,9 +171,19 @@
     <Compile Include="Anasayfa.Designer.cs">
       <DependentUpon>Anasayfa.cs</DependentUpon>
     </Compile>
+    <Compile Include="APIService\APIResult.cs" />
     <Compile Include="APIService\APIServices.cs" />
     <Compile Include="APIService\BarkodAPI.cs" />
+    <Compile Include="APIService\HizliUrunAPI.cs" />
+    <Compile Include="APIService\IslemAPI.cs" />
+    <Compile Include="APIService\IslemOzetAPI.cs" />
+    <Compile Include="APIService\KullaniciAPI.cs" />
+    <Compile Include="APIService\SabitAPI.cs" />
+    <Compile Include="APIService\SatisAPI.cs" />
+    <Compile Include="APIService\StokHareketAPI.cs" />
+    <Compile Include="APIService\TeraziAPI.cs" />
     <Compile Include="APIService\UrunAPI.cs" />
+    <Compile Include="APIService\UrunGrupAPI.cs" />
     <Compile Include="Ayarlar.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -224,7 +234,16 @@
     </Compile>
     <Compile Include="Models\FormDTO\APIResponseDTO.cs" />
     <Compile Include="Models\FormDTO\BarkodDTO.cs" />
+    <Compile Include="Models\FormDTO\HizliUrunDTO.cs" />
+    <Compile Include="Models\FormDTO\IslemDTO.cs" />
+    <Compile Include="Models\FormDTO\IslemOzetDTO.cs" />
+    <Compile Include="Models\FormDTO\KullaniciDTO.cs" />
+    <Compile Include="Models\FormDTO\SabitDTO.cs" />
+    <Compile Include="Models\FormDTO\SatisDTO.cs" />
+    <Compile Include="Models\FormDTO\StokHareketDTO.cs" />
+    <Compile Include="Models\FormDTO\TeraziDTO.cs" />
     <Compile Include="Models\FormDTO\UrunDTO.cs" />
+    <Compile Include="Models\FormDTO\UrunGrupDTO.cs" />
     <Compile Include="Models\HizliUrun.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>

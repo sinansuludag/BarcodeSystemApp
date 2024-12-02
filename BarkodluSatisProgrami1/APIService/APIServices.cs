@@ -1,124 +1,191 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using BarkodluSatisProgrami1.APIService;
+using Newtonsoft.Json;
 
-namespace BarkodluSatisProgrami1.APIService
+public class ApiServices<T> where T : class
 {
-    public class ApiServices<T> where T : class
+    private readonly HttpClient _httpClient;
+
+    public ApiServices()
     {
-        private readonly HttpClient _httpClient;
+        _httpClient = new HttpClient();
+    }
 
-        public ApiServices()
+    
+    public async Task<APIResult<List<T>>> GetList(string apiUrl)
+    {
+        try
         {
-            _httpClient = new HttpClient();
-        }
+            var response = await _httpClient.GetAsync(apiUrl);
 
-        // GET: Tüm öğeleri listele
-        public async Task<List<T>> GetList(string apiUrl)
-        {
-            try
+            if (response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.GetAsync(apiUrl);
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<List<T>>(jsonResponse);
 
-                if (response.IsSuccessStatusCode)
+                if (result == null || result.Count == 0)
                 {
-                    var jsonResponse = await response.Content.ReadAsStringAsync();
-                    var result = JsonConvert.DeserializeObject<List<T>>(jsonResponse);
-                    return result;
+                    return new APIResult<List<T>>
+                    {
+                        IsSuccess = false,
+                        ErrorMessage = "Kayıt bulunamadı."
+                    };
                 }
-                else
+
+                return new APIResult<List<T>> { IsSuccess = true, Data = result };
+            }
+            else
+            {
+                return new APIResult<List<T>>
                 {
-                    throw new Exception($"API Hatası: {response.StatusCode}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Hata: {ex.Message}");
-                return new List<T>();
+                    IsSuccess = false,
+                    ErrorMessage = $"API Hatası: {response.StatusCode}"
+                };
             }
         }
-
-        // GET: ID'ye göre öğe al
-        public async Task<T> GetById(string apiUrl, int id)
+        catch (Exception ex)
         {
-            try
+            return new APIResult<List<T>>
             {
-                var response = await _httpClient.GetAsync($"{apiUrl}/{id}");
+                IsSuccess = false,
+                ErrorMessage = $"Beklenmeyen hata({typeof(T).Name}): {ex.Message}"
+            };
+        }
+    }
 
-                if (response.IsSuccessStatusCode)
+    
+    public async Task<APIResult<T>> GetById(string apiUrl, int id)
+    {
+        try
+        {
+            var response = await _httpClient.GetAsync($"{apiUrl}/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<T>(jsonResponse);
+
+                if (result == null)
                 {
-                    var jsonResponse = await response.Content.ReadAsStringAsync();
-                    var result = JsonConvert.DeserializeObject<T>(jsonResponse);
-                    return result;
+                    return new APIResult<T>
+                    {
+                        IsSuccess = false,
+                        ErrorMessage = "ID ile eşleşen kayıt bulunamadı."
+                    };
                 }
-                else
+
+                return new APIResult<T> { IsSuccess = true, Data = result };
+            }
+            else
+            {
+                return new APIResult<T>
                 {
-                    throw new Exception($"API Hatası: {response.StatusCode}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Hata: {ex.Message}");
-                return null;
+                    IsSuccess = false,
+                    ErrorMessage = $"API Hatası: {response.StatusCode}"
+                };
             }
         }
-
-        // POST: Yeni öğe ekle
-        public async Task<bool> Add(string apiUrl, T entity)
+        catch (Exception ex)
         {
-            try
+            return new APIResult<T>
             {
-                var jsonContent = JsonConvert.SerializeObject(entity);
-                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-
-                var response = await _httpClient.PostAsync(apiUrl, content);
-
-                return response.IsSuccessStatusCode;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Hata: {ex.Message}");
-                return false;
-            }
+                IsSuccess = false,
+                ErrorMessage = $"Beklenmeyen hata( {typeof(T).Name} ): {ex.Message}"
+            };
         }
+    }
 
-        // PUT: Öğeyi güncelle
-        public async Task<bool> Update(string apiUrl, int id, T entity)
+
+    public async Task<APIResult<bool>> Add(string apiUrl, T entity)
+    {
+        try
         {
-            try
-            {
-                var jsonContent = JsonConvert.SerializeObject(entity);
-                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            var jsonContent = JsonConvert.SerializeObject(entity);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-                var response = await _httpClient.PutAsync($"{apiUrl}/{id}", content);
+            var response = await _httpClient.PostAsync(apiUrl, content);
 
-                return response.IsSuccessStatusCode;
-            }
-            catch (Exception ex)
+            if (response.IsSuccessStatusCode)
             {
-                Console.WriteLine($"Hata: {ex.Message}");
-                return false;
+                return new APIResult<bool> { IsSuccess = true, Data = true };
             }
+
+            return new APIResult<bool>
+            {
+                IsSuccess = false,
+                ErrorMessage = $"API Hatası: {response.StatusCode}"
+            };
         }
-
-        // DELETE: Öğeyi sil
-        public async Task<bool> Delete(string apiUrl, int id)
+        catch (Exception ex)
         {
-            try
+            return new APIResult<bool>
             {
-                var response = await _httpClient.DeleteAsync($"{apiUrl}/{id}");
+                IsSuccess = false,
+                ErrorMessage = $"Beklenmeyen hata( {typeof(T).Name} ): {ex.Message}"
+            };
+        }
+    }
 
-                return response.IsSuccessStatusCode;
-            }
-            catch (Exception ex)
+
+    public async Task<APIResult<bool>> Update(string apiUrl, int id, T entity)
+    {
+        try
+        {
+            var jsonContent = JsonConvert.SerializeObject(entity);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync($"{apiUrl}/{id}", content);
+
+            if (response.IsSuccessStatusCode)
             {
-                Console.WriteLine($"Hata: {ex.Message}");
-                return false;
+                return new APIResult<bool> { IsSuccess = true, Data = true };
             }
+
+            return new APIResult<bool>
+            {
+                IsSuccess = false,
+                ErrorMessage = $"API Hatası: {response.StatusCode}"
+            };
+        }
+        catch (Exception ex)
+        {
+            return new APIResult<bool>
+            {
+                IsSuccess = false,
+                ErrorMessage = $"Beklenmeyen hata(  {typeof(T).Name}  ): {ex.Message}"
+            };
+        }
+    }
+
+
+    public async Task<APIResult<bool>> Delete(string apiUrl, int id)
+    {
+        try
+        {
+            var response = await _httpClient.DeleteAsync($"{apiUrl}/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return new APIResult<bool> { IsSuccess = true, Data = true };
+            }
+
+            return new APIResult<bool>
+            {
+                IsSuccess = false,
+                ErrorMessage = $"API Hatası: {response.StatusCode}"
+            };
+        }
+        catch (Exception ex)
+        {
+            return new APIResult<bool>
+            {
+                IsSuccess = false,
+                ErrorMessage = $"Beklenmeyen hata(  {typeof(T).Name}  ): {ex.Message}"
+            };
         }
     }
 }
