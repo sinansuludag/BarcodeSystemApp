@@ -10,7 +10,7 @@ namespace BarkodluSatisProgrami1.Models.FormDTO
     {
         public int Id { get; set; }
 
-        public string BarkodNo { get; set; }
+        public int BarkodNo { get; set; }
 
 
     }

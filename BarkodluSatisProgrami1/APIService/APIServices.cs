@@ -74,7 +74,7 @@ public class ApiServices<T> where T : class
                     return new APIResult<T>
                     {
                         IsSuccess = false,
-                        ErrorMessage = "ID ile eşleşen kayıt bulunamadı."
+                        ErrorMessage = $"{id} ID'si ile eşleşen kayıt bulunamadı."
                     };
                 }
 

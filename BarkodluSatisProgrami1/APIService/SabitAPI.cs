@@ -1,4 +1,5 @@
-﻿using BarkodluSatisProgrami1.Models.FormDTO;
+﻿using BarkodluSatisProgrami1.Exceptions;
+using BarkodluSatisProgrami1.Models.FormDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +26,11 @@ namespace BarkodluSatisProgrami1.APIService
             {
                 return response.Data;
             }
+            else
+            {
+                return null;
+            }
 
-            throw new Exception($"Hata :{response.ErrorMessage}");
         }
 
         public async Task<SabitDTO> SabitGetById(int id)
@@ -39,7 +43,7 @@ namespace BarkodluSatisProgrami1.APIService
                 return response.Data;
             }
 
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            throw new CustomNotFoundException($"{response.ErrorMessage}");
         }
 
         public async Task<bool> SabitAdd(SabitDTO sabit)
@@ -52,7 +56,7 @@ namespace BarkodluSatisProgrami1.APIService
                 return response.Data;
             }
 
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            throw new CustomNotFoundException($"{response.ErrorMessage}");
         }
 
         public async Task<bool> SabitUpdate(int id, SabitDTO sabit)
@@ -65,7 +69,7 @@ namespace BarkodluSatisProgrami1.APIService
                 return response.Data;
             }
 
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            throw new CustomNotFoundException($"{response.ErrorMessage}");
         }
 
         public async Task<bool> SabitDelete(int id)
@@ -77,7 +81,7 @@ namespace BarkodluSatisProgrami1.APIService
             {
                 return response.Data;
             }
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            throw new CustomNotFoundException($"{response.ErrorMessage}");
         }
     }
 }

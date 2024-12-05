@@ -159,7 +159,7 @@
             this.gridUrunler.Size = new System.Drawing.Size(990, 413);
             this.gridUrunler.TabIndex = 2;
             this.gridUrunler.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridUrunler_CellContentClick);
-            this.gridUrunler.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridUrunler_CellContentDoubleClick);
+            this.gridUrunler.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridUrunler_CellContentDoubleClickAsync);
             // 
             // HizliButonUrunEkle
             // 

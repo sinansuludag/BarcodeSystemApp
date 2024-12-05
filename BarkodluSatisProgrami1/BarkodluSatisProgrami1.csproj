@@ -190,6 +190,7 @@
     <Compile Include="Ayarlar.Designer.cs">
       <DependentUpon>Ayarlar.cs</DependentUpon>
     </Compile>
+    <Compile Include="Exceptions\CustomNotFoundException.cs" />
     <Compile Include="Models\Barkod.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>

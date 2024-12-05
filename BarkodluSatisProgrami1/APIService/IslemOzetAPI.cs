@@ -1,4 +1,5 @@
-﻿using BarkodluSatisProgrami1.Models;
+﻿using BarkodluSatisProgrami1.Exceptions;
+using BarkodluSatisProgrami1.Models;
 using BarkodluSatisProgrami1.Models.FormDTO;
 using System;
 using System.Collections.Generic;
@@ -26,8 +27,10 @@ namespace BarkodluSatisProgrami1.APIService
             {
                 return response.Data;
             }
-
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            else
+            {
+                return null;
+            }
         }
 
         public async Task<IslemOzetDTO> IslemOzetGetById(int id)
@@ -40,7 +43,7 @@ namespace BarkodluSatisProgrami1.APIService
                 return response.Data;
             }
 
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            throw new CustomNotFoundException($"{response.ErrorMessage}");
         }
 
         public async Task<bool> IslemOzetAdd(IslemOzetDTO islemOzet)
@@ -53,7 +56,7 @@ namespace BarkodluSatisProgrami1.APIService
                 return response.Data;
             }
 
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            throw new CustomNotFoundException($"{response.ErrorMessage}");
         }
 
         public async Task<bool> IslemOzetUpdate(int id, IslemOzetDTO islemOzet)
@@ -66,7 +69,7 @@ namespace BarkodluSatisProgrami1.APIService
                 return response.Data;
             }
 
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            throw new CustomNotFoundException($"{response.ErrorMessage}");
         }
 
         public async Task<bool> IslemOzetDelete(int id)
@@ -78,7 +81,7 @@ namespace BarkodluSatisProgrami1.APIService
             {
                 return response.Data;
             }
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            throw new CustomNotFoundException($"{response.ErrorMessage}");
         }
     }
 }

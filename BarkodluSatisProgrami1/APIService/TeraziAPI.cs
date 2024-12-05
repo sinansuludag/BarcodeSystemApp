@@ -1,4 +1,5 @@
-﻿using BarkodluSatisProgrami1.Models.FormDTO;
+﻿using BarkodluSatisProgrami1.Exceptions;
+using BarkodluSatisProgrami1.Models.FormDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +26,10 @@ namespace BarkodluSatisProgrami1.APIService
             {
                 return response.Data;
             }
-
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            else
+            {
+                return null;
+            }
         }
 
         public async Task<TeraziDTO> TeraziGetById(int id)
@@ -39,7 +42,7 @@ namespace BarkodluSatisProgrami1.APIService
                 return response.Data;
             }
 
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            throw new CustomNotFoundException($"{response.ErrorMessage}");
         }
 
         public async Task<bool> TeraziAdd(TeraziDTO terazi)
@@ -52,7 +55,7 @@ namespace BarkodluSatisProgrami1.APIService
                 return response.Data;
             }
 
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            throw new CustomNotFoundException($"{response.ErrorMessage}");
         }
 
         public async Task<bool> TeraziUpdate(int id, TeraziDTO terazi)
@@ -65,7 +68,7 @@ namespace BarkodluSatisProgrami1.APIService
                 return response.Data;
             }
 
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            throw new CustomNotFoundException($"{response.ErrorMessage}");
         }
 
         public async Task<bool> TeraziDelete(int id)
@@ -77,7 +80,7 @@ namespace BarkodluSatisProgrami1.APIService
             {
                 return response.Data;
             }
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            throw new CustomNotFoundException($"{response.ErrorMessage}");
         }
     }
 }

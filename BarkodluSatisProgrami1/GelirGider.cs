@@ -1,5 +1,8 @@
 ﻿using BarkodluSatisProgrami1;
+using BarkodluSatisProgrami1.APIService;
+using BarkodluSatisProgrami1.Exceptions;
 using BarkodluSatisProgrami1.Models;
+using BarkodluSatisProgrami1.Models.FormDTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,9 +17,11 @@ namespace BarkodluSatisProgrami1
 {
     public partial class GelirGider : Form
     {
+        IslemOzetAPI islemOzetAPI;
         public GelirGider()
         {
             InitializeComponent();
+            islemOzetAPI = new IslemOzetAPI();
         }
 
         public string gelirgider { get; set; }
@@ -48,15 +53,13 @@ namespace BarkodluSatisProgrami1
             txtKart.Text = "0";
         }
 
-        private void btnEkle_Click(object sender, EventArgs e)
+        private async void btnEkle_Click(object sender, EventArgs e)
         {
             if(cbOdemeTuru.Text != "")
             {
                 if(txtNakit.Text != "" && txtKart.Text != "" )
                 {
-                    using(var db=new DbBarkodEntities())
-                    {
-                        IslemOzet io = new IslemOzet();
+                        IslemOzetDTO io = new IslemOzetDTO();
                         io.IslemNo = 0;
                         io.Iade = false;
                         io.OdemeSekli=cbOdemeTuru.Text;
@@ -76,8 +79,20 @@ namespace BarkodluSatisProgrami1
                         io.Aciklama=gelirgider+" - İşlemi "+txtAciklama.Text;
                         io.Tarih=dtTarih.Value;
                         io.Kullanici = kullanici;
-                        db.IslemOzets.Add(io);
-                        db.SaveChanges();
+                    try
+                    {
+                        await islemOzetAPI.IslemOzetAdd(io);
+                    }
+                    catch(CustomNotFoundException ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Beklenmedik bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                        
+
                         MessageBox.Show(gelirgider + " işlemi kaydedildi");
                         txtNakit.Text = "0";
                         txtKart.Text = "0";
@@ -89,7 +104,7 @@ namespace BarkodluSatisProgrami1
                             rapor.btnGoster_Click(null, null);
                         }
                         this.Hide();
-                    }
+                   
                 }
             }
             else

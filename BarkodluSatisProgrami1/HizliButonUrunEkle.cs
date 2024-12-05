@@ -10,32 +10,48 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using BarkodluSatisProgrami1;
 using BarkodluSatisProgrami1.Models;
+using BarkodluSatisProgrami1.APIService;
+using BarkodluSatisProgrami1.Exceptions;
 
 namespace BarkodluSatisProgrami1
 {
     public partial class HizliButonUrunEkle : Form
     {
+        UrunAPI urunAPI;
+        HizliUrunAPI hizliUrunAPI;
         public HizliButonUrunEkle()
         {
             InitializeComponent();
+            urunAPI = new UrunAPI();
+            hizliUrunAPI = new HizliUrunAPI();
         }
 
-        DbBarkodEntities db=new DbBarkodEntities();
+
 
         //Giren karaktere gore urunleri listele
-        private void txtUrunAra_TextChanged(object sender, EventArgs e)
+        private async void txtUrunAra_TextChanged(object sender, EventArgs e)
         {
             if (txtUrunAra.Text != "")
             {
+                var uruns = await urunAPI.UrunList();
                 string urunAd=txtUrunAra.Text;
-                var urunler= db.Uruns.Where(a=>a.UrunAd.Contains(urunAd)).ToList();
-                gridUrunler.DataSource = urunler;
+
+                if (uruns != null)
+                {
+                    var urunler = uruns.Where(a => a.UrunAd.Contains(urunAd)).ToList();
+                    gridUrunler.DataSource = urunler;
+                }
+                else
+                {
+                    gridUrunler.DataSource = null;
+                }
+                
                 Islemler.GridDuzenle(gridUrunler);
             }
         }
 
         //İki kere tiklandiğinda hizli butona ekle
-        private void gridUrunler_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private async void gridUrunler_CellContentDoubleClickAsync(object sender, DataGridViewCellEventArgs e)
         {
             if (gridUrunler.Rows.Count > 0)
             {
@@ -43,11 +59,24 @@ namespace BarkodluSatisProgrami1
                 string urunAd = gridUrunler.CurrentRow.Cells["UrunAd"].Value.ToString();
                 double fiyat = Convert.ToDouble(gridUrunler.CurrentRow.Cells["SatisFiyati"].Value.ToString());
                 int id=Convert.ToInt16(lblButonNo.Text);
-                var guncellenecek=db.HizliUruns.Find(id);
+
+                var guncellenecek=await hizliUrunAPI.HizliUrunGetById(id);
                 guncellenecek.Barkod=barkod;
                 guncellenecek.UrunAd=urunAd;
                 guncellenecek.Fiyat=fiyat;
-                db.SaveChanges();
+                try
+                {
+                    await hizliUrunAPI.HizliUrunUpdate(id, guncellenecek);
+                }
+                catch(CustomNotFoundException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show("Beklenmedik bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
                 MessageBox.Show("Buton tanımlanmıştır");
                 fSatis satis = (fSatis)Application.OpenForms["fSatis"];
                 if (satis != null)
@@ -59,16 +88,25 @@ namespace BarkodluSatisProgrami1
         }
 
         //Tümünü göstere tıkla
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private async void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             if (chUrunGoster.Checked)
             {
-                gridUrunler.DataSource=db.Uruns.ToList();
-                gridUrunler.Columns["AlisFiyati"].Visible = false;
-                gridUrunler.Columns["Satisfiyati"].Visible = false;
-                gridUrunler.Columns["KdvOrani"].Visible = false;
-                gridUrunler.Columns["KdvTutari"].Visible = false;
-                gridUrunler.Columns["Miktar"].Visible = false;
+                var uruns = await urunAPI.UrunList();
+                if (uruns != null)
+                {
+                    gridUrunler.DataSource = uruns;
+                    gridUrunler.Columns["AlisFiyati"].Visible = false;
+                    gridUrunler.Columns["Satisfiyati"].Visible = false;
+                    gridUrunler.Columns["KdvOrani"].Visible = false;
+                    gridUrunler.Columns["KdvTutari"].Visible = false;
+                    gridUrunler.Columns["Miktar"].Visible = false;
+                }
+                else
+                {
+                    gridUrunler.DataSource=null;
+                }
+                
                 Islemler.GridDuzenle(gridUrunler);
             }
             else

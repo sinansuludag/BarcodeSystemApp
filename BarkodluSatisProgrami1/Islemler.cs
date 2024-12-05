@@ -1,4 +1,7 @@
-﻿using BarkodluSatisProgrami1.Models;
+﻿using BarkodluSatisProgrami1.APIService;
+using BarkodluSatisProgrami1.Exceptions;
+using BarkodluSatisProgrami1.Models;
+using BarkodluSatisProgrami1.Models.FormDTO;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -13,6 +16,7 @@ namespace BarkodluSatisProgrami1
 {
     static class Islemler
     {
+
         public static double DoubleYap(string deger)
         {
             double sonuc;
@@ -20,29 +24,54 @@ namespace BarkodluSatisProgrami1
             return Math.Round(sonuc, 2);
         }
 
-        public static void StokAzalt(string barkod, double miktar)
-        {
+        public static async void StokAzalt(string barkod, double miktar,UrunAPI urunAPI,int urunID)
+        {    
             if (barkod != "1111111111116")
             {
-                using (var db = new DbBarkodEntities())
+                var uruns = await urunAPI.UrunList();
+                if(uruns != null)
                 {
-                    var urunBilgi = db.Uruns.SingleOrDefault(x => x.Barkod == barkod);
+                    var urunBilgi = uruns.SingleOrDefault(x => x.Barkod == barkod);
                     urunBilgi.Miktar -= miktar;
-                    db.SaveChanges();
+                    try
+                    {
+                        await urunAPI.UrunUpdate(urunID, urunBilgi);
+                    }
+                    catch(CustomNotFoundException ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Beklenmedik bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
+ 
             }
             
         }
 
-        public static void StokArtir(string barkod, double miktar)
+        public static async void StokArtir(string barkod, double miktar, UrunAPI urunAPI, int urunID)
         {
             if(barkod != "1111111111116")
             {
-                using (var db = new DbBarkodEntities())
+                var uruns = await urunAPI.UrunList();
+                if (uruns != null)
                 {
-                    var urunBilgi = db.Uruns.SingleOrDefault(x => x.Barkod == barkod);
+                    var urunBilgi = uruns.SingleOrDefault(x => x.Barkod == barkod);
                     urunBilgi.Miktar += miktar;
-                    db.SaveChanges();
+                    try
+                    {
+                        await urunAPI.UrunUpdate(urunID, urunBilgi);
+                    }
+                    catch (CustomNotFoundException ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Beklenmedik bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
             
@@ -119,47 +148,54 @@ namespace BarkodluSatisProgrami1
             }
         }
 
-        public static void StokHareket(string barkod,string urunad,string birim,double miktar,string urungrup,string kullanici)
+        public static async void StokHareketAsync(string barkod,string urunad,string birim,double miktar,string urungrup,string kullanici)
         {
-            using(var db=new DbBarkodEntities())
+            StokHareketAPI stokHareketAPI = new StokHareketAPI();
+
+                StokHareketDTO stokHareketDTO = new StokHareketDTO();
+                stokHareketDTO.Barkod = barkod;
+                stokHareketDTO.UrunAd=urunad;
+                stokHareketDTO.Birim = birim;
+                stokHareketDTO.Miktar = miktar;
+                stokHareketDTO.UrunGrup = urungrup;
+                stokHareketDTO.Kullanici = kullanici;
+                stokHareketDTO.Tarih=DateTime.Now;
+            try
             {
-                StokHareket stokHareket = new StokHareket();
-                stokHareket.Barkod = barkod;
-                stokHareket.UrunAd=urunad;
-                stokHareket.Birim = birim;
-                stokHareket.Miktar = miktar;
-                stokHareket.UrunGrup = urungrup;
-                stokHareket.Kullanici = kullanici;
-                stokHareket.Tarih=DateTime.Now;
-                db.StokHarekets.Add(stokHareket);
-                db.SaveChanges();
+                await stokHareketAPI.StokHareketAdd(stokHareketDTO);
+            }
+            catch (CustomNotFoundException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Beklenmedik bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        public static int KartKomisyon()
+        public static async Task<int> KartKomisyon(SabitAPI sabitAPI)
         {
             int sonuc = 0;
-            using(var db=new DbBarkodEntities())
-            {
-                if (db.Sabits.Any())
+            var sabits = await sabitAPI.SabitList();
+                if (sabits!=null)
                 {
-                    sonuc = Convert.ToInt16(db.Sabits.First().KartKomisyon);
+                    sonuc = Convert.ToInt16(sabits.First().KartKomisyon);
                 }
                 else
                 {
                     sonuc = 0;
                 }
-            }
+
             return sonuc;
         }
 
-        public static void SabitVarsayilan()
+        public static async void SabitVarsayilan(SabitAPI sabitAPI)
         {
-            using(var db=new DbBarkodEntities())
-            {
-                if (!db.Sabits.Any())
+            var sabits=await sabitAPI.SabitList();
+                if (!(sabits!=null))
                 {
-                    Sabit s = new Sabit();
+                    SabitDTO s = new SabitDTO();
                     s.KartKomisyon = 0;
                     s.Yazici = false;
                     s.Adres = "admin";
@@ -167,11 +203,21 @@ namespace BarkodluSatisProgrami1
                     s.Telefon= "admin";
                     s.Eposta="admin";
                     s.AdSoyad="admin";
-                    db.Sabits.Add(s);
-                    db.SaveChanges();
+
+                try
+                {
+                    await sabitAPI.SabitAdd(s);
+                }
+                catch(CustomNotFoundException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show("Beklenmedik bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
 
                 }
-            }
         }
 
         public static void Backup()

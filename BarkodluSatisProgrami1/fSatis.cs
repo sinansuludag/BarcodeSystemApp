@@ -10,20 +10,37 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using BarkodluSatisProgrami1.Models;
+using BarkodluSatisProgrami1.APIService;
+using BarkodluSatisProgrami1.Models.FormDTO;
+using BarkodluSatisProgrami1.Exceptions;
 
 
 namespace BarkodluSatisProgrami1
 {
     public partial class fSatis : Form
     {
+        UrunAPI urunAPI;
+        SabitAPI sabitAPI;
+        TeraziAPI teraziAPI;
+        HizliUrunAPI hizliUrunAPI;
+        IslemAPI islemAPI;
+        SatisAPI satisAPI;
+        IslemOzetAPI islemOzetAPI;
         public fSatis()
         {
             InitializeComponent();
+            urunAPI = new UrunAPI();
+            sabitAPI = new SabitAPI();
+            teraziAPI = new TeraziAPI();
+            hizliUrunAPI = new HizliUrunAPI();
+            islemAPI = new IslemAPI();
+            satisAPI = new SatisAPI();
+            islemOzetAPI = new IslemOzetAPI();
         }
 
-        DbBarkodEntities db=new DbBarkodEntities();
 
-        private void fSatis_Load(object sender, EventArgs e)
+
+        private async void fSatis_Load(object sender, EventArgs e)
         {
             HizliButonDoldur();
             btn5.Text = 5.ToString("C2");
@@ -34,14 +51,19 @@ namespace BarkodluSatisProgrami1
             btn200.Text = 200.ToString("C2");
             txtMiktar.Text = 1.ToString();
 
-            using(var db=new DbBarkodEntities())
+            var sabits = await sabitAPI.SabitList();
+            if(sabits!=null && sabits.Any())
             {
-                var sabit = db.Sabits.FirstOrDefault();
-                chYazdirmaDurumu.Checked=Convert.ToBoolean(sabit.Yazici);
+                var sabit = sabits.FirstOrDefault();
+                chYazdirmaDurumu.Checked = Convert.ToBoolean(sabit.Yazici);
+            }
+            else
+            {
+                chYazdirmaDurumu.Checked=false;
             }
         }
 
-        private void txtBarkod_KeyDown(object sender, KeyEventArgs e)
+        private async void txtBarkod_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
@@ -55,20 +77,22 @@ namespace BarkodluSatisProgrami1
                 }
                 else
                 {
-                    if (db.Uruns.Any(x => x.Barkod == barkod))
+                    var uruns=await urunAPI.UrunList();
+                    if (uruns!=null && uruns.Any(x => x.Barkod == barkod))
                     {
-                        var urun = db.Uruns.Where(a => a.Barkod == barkod).FirstOrDefault();
+                        var urun = uruns.Where(a => a.Barkod == barkod).FirstOrDefault();
                         UrunGetirListeye(urun, barkod, Convert.ToDouble(txtMiktar.Text));
                     }
                     else
                     {
+                        var terazis=await teraziAPI.TeraziList();
                         int onek=Convert.ToInt32(barkod.Substring(0, 2));
-                        if (db.Terazis.Any(a => a.TeraziOnEk == onek))
+                        if (terazis!=null && terazis.Any(a => a.TeraziOnEk == onek))
                         {
                             string teraziUrunNo=barkod.Substring(2, 5);
-                            if (db.Uruns.Any(a => a.Barkod == teraziUrunNo))
+                            if (uruns.Any(a => a.Barkod == teraziUrunNo))
                             {
-                                var urunTerazi = db.Uruns.Where(x => x.Barkod == teraziUrunNo).FirstOrDefault();
+                                var urunTerazi = uruns.Where(x => x.Barkod == teraziUrunNo).FirstOrDefault();
                                 double miktarKg=Convert.ToDouble(barkod.Substring(7, 5))/1000;
                                 UrunGetirListeye(urunTerazi,teraziUrunNo,miktarKg);
                             }
@@ -93,7 +117,7 @@ namespace BarkodluSatisProgrami1
             }
         }
 
-        private void UrunGetirListeye(Urun urun,string barkod,double miktar)
+        private void UrunGetirListeye(UrunDTO urun,string barkod,double miktar)
         {
             
             int satirSayisi = gridSatisListesi.Rows.Count;
@@ -129,9 +153,11 @@ namespace BarkodluSatisProgrami1
             Geneltoplam();
         }
 
-        private void HizliButonDoldur()
+        private async void HizliButonDoldur()
         {
-            var hizliUrun=db.HizliUruns.ToList();
+
+            var hizliUrun=await hizliUrunAPI.HizliUrunList();
+
             foreach(var item in hizliUrun)
             {
                 Button bH=this.Controls.Find("bH"+item.Id,true).FirstOrDefault() as Button;
@@ -174,7 +200,7 @@ namespace BarkodluSatisProgrami1
         }
 
         //Hizli buton 
-        private void bHizli1_Click(object sender, EventArgs e)
+        private async void bHizli1_Click(object sender, EventArgs e)
         {
             Button b = (Button)sender;
             int butonid = Convert.ToInt16(b.Name.ToString().Substring(2, b.Name.Length - 2));
@@ -187,8 +213,10 @@ namespace BarkodluSatisProgrami1
             }
             else
             {
-                var urunBarkod = db.HizliUruns.Where(a => a.Id == butonid).Select(x => x.Barkod).FirstOrDefault();
-                var urun = db.Uruns.Where(a => a.Barkod == urunBarkod).FirstOrDefault();
+                var hizliUruns = await hizliUrunAPI.HizliUrunList();
+                var uruns= await urunAPI.UrunList();
+                var urunBarkod = hizliUruns.Where(a => a.Id == butonid).Select(x => x.Barkod).FirstOrDefault();
+                var urun = uruns.Where(a => a.Barkod == urunBarkod).FirstOrDefault();
                 UrunGetirListeye(urun, urunBarkod, Convert.ToDouble(txtMiktar.Text));
                 Geneltoplam();
             }
@@ -215,17 +243,29 @@ namespace BarkodluSatisProgrami1
         }
 
         //Hizli butonu eski haline getir
-        private void Sil_Click(object sender, EventArgs e)
+        private async void Sil_Click(object sender, EventArgs e)
         {
             int butonid = Convert.ToInt16(sender.ToString().Substring(19, sender.ToString().Length - 19));
-            var guncelle=db.HizliUruns.Find(butonid);
-            guncelle.Barkod = "-";
-            guncelle.UrunAd = "-";
-            guncelle.Fiyat = 0;
-            db.SaveChanges();
-            double fiyat = 0;
-            Button btn = this.Controls.Find("bH"+butonid,true).FirstOrDefault() as Button;
-            btn.Text = "-" + "\n" + fiyat.ToString("C2");
+            try
+            {
+                var guncelle = await hizliUrunAPI.HizliUrunGetById(butonid);
+                guncelle.Barkod = "-";
+                guncelle.UrunAd = "-";
+                guncelle.Fiyat = 0;
+                await hizliUrunAPI.HizliUrunUpdate(butonid, guncelle);
+                double fiyat = 0;
+                Button btn = this.Controls.Find("bH" + butonid, true).FirstOrDefault() as Button;
+                btn.Text = "-" + "\n" + fiyat.ToString("C2");
+            }
+            catch(CustomNotFoundException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Beklenmedik bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+           
         }
 
         //Numarator işlevli yap
@@ -279,13 +319,14 @@ namespace BarkodluSatisProgrami1
         }
 
         //Barkodlu urunu getir
-        private void btnBarkod_Click_1(object sender, EventArgs e)
+        private async void btnBarkod_Click_1(object sender, EventArgs e)
         {
+            var uruns = await urunAPI.UrunList();
             if (txtNumarator.Text != "")
             {
-                if (db.Uruns.Any(x => x.Barkod == txtNumarator.Text))
+                if (uruns!=null && uruns.Any(x => x.Barkod == txtNumarator.Text))
                 {
-                     var urun=db.Uruns.Where(a=>a.Barkod==txtNumarator.Text).FirstOrDefault();
+                     var urun=uruns.Where(a=>a.Barkod==txtNumarator.Text).FirstOrDefault();
                     UrunGetirListeye(urun,txtNumarator.Text,Convert.ToDouble(txtMiktar.Text));
                     txtNumarator.Clear();
                     txtBarkod.Focus();
@@ -362,15 +403,24 @@ namespace BarkodluSatisProgrami1
             txtBarkod.Focus();
         }
 
-        public void SatisYap(string odemeSekli)
+        public async void SatisYap(string odemeSekli)
         {
             int satirSayisi=gridSatisListesi.Rows.Count;
             bool satisIade=chSatisIadeIslemi.Checked;
             double alisFiyatToplami = 0;
             if (satirSayisi > 0)
             {
-                int? islemNo = db.Islems.First().IslemNo;
-                Satis satis = new Satis();
+                var islems = await islemAPI.IslemList();
+                int? islemNo;
+                if (islems == null)
+                {
+                    islemNo = 1;
+                }
+                else
+                {
+                    islemNo = islems.First().IslemNo;
+                }
+                SatisDTO satis = new SatisDTO();
                 for(int i = 0; i < satirSayisi; i++)
                 {
                     satis.IslemNo = islemNo;
@@ -387,23 +437,38 @@ namespace BarkodluSatisProgrami1
                     satis.Iade = satisIade;
                     satis.Tarih = DateTime.Now;
                     satis.Kullanici = lblKullanici.Text;
-                    db.Satiss.Add(satis);
-                    db.SaveChanges();
+                    try
+                    {
+                        await satisAPI.SatisAdd(satis);
+                    }
+                    catch(CustomNotFoundException ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Beklenmedik bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                    string barkod = gridSatisListesi.Rows[i].Cells["Barkod"].Value.ToString();
+                    double miktar = Islemler.DoubleYap(gridSatisListesi.Rows[i].Cells["Miktar"].Value.ToString());
+
+                    var uruns = await urunAPI.UrunList();
+                    var urun = uruns.Where(a => a.Barkod == barkod).First();
+                    var id = urun.UrunId;
                     if (!satisIade)
                     {
-                        string barkod = gridSatisListesi.Rows[i].Cells["Barkod"].Value.ToString();
-                        Islemler.StokAzalt(barkod, Islemler.DoubleYap(gridSatisListesi.Rows[i].Cells["Miktar"].Value.ToString()));
-                        
+                        Islemler.StokAzalt(barkod,miktar,urunAPI,id);   
                     }
                     else
                     {
-                        Islemler.StokArtir(gridSatisListesi.Rows[i].Cells["Barkod"].Value.ToString(), Islemler.DoubleYap(gridSatisListesi.Rows[i].Cells["Miktar"].Value.ToString()));
+                        Islemler.StokArtir(barkod, miktar, urunAPI,id );
                     }
                     alisFiyatToplami += Islemler.DoubleYap(gridSatisListesi.Rows[i].Cells["AlisFiyati"].Value.ToString())* Islemler.DoubleYap(gridSatisListesi.Rows[i].Cells["Miktar"].Value.ToString());
 
                 }
                 MessageBox.Show("Satış yapılmıştır");
-                IslemOzet io=new IslemOzet();
+                IslemOzetDTO io=new IslemOzetDTO();
                 io.IslemNo=islemNo;
                 io.Iade = satisIade;
                 io.AlisFiyatToplam = alisFiyatToplami;
@@ -435,12 +500,12 @@ namespace BarkodluSatisProgrami1
                         io.Kart= Islemler.DoubleYap(lblKart.Text);
                         break;
                 }
-                db.IslemOzets.Add(io);
-                db.SaveChanges();
 
-                var islemNoArttir=db.Islems.First();
+                await islemOzetAPI.IslemOzetAdd(io);
+
+                var islemNoArttir=islems.First();
                 islemNoArttir.IslemNo += 1;
-                db.SaveChanges();
+                await islemAPI.IslemUpdate(islemNoArttir.Id,islemNoArttir);
                 if (chYazdirmaDurumu.Checked)
                 {
                     Yazdir yazdir = new Yazdir(islemNo);
@@ -562,11 +627,29 @@ namespace BarkodluSatisProgrami1
             }
         }
 
-        private void btnFisYazdir_Click(object sender, EventArgs e)
+        private async void btnFisYazdir_Click(object sender, EventArgs e)
         {
-            int? islemNo = db.Islems.First().IslemNo;
-            Yazdir yazdir = new Yazdir(islemNo);
-            yazdir.YazdirmayaBasla();
+            try
+            {
+                var islems = await islemAPI.IslemList();
+                int? islemNo;
+                if (islems != null && islems.Any())
+                {
+                    islemNo = islems.First().IslemNo;
+                }
+                else
+                {
+                    islemNo = 1;
+                }
+                Yazdir yazdir = new Yazdir(islemNo);
+                yazdir.YazdirmayaBasla();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Beklenmedik bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+           
+   
         }
 
 

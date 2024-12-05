@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using BarkodluSatisProgrami1.Exceptions;
 
 namespace BarkodluSatisProgrami1.APIService
 {
@@ -28,8 +29,11 @@ namespace BarkodluSatisProgrami1.APIService
             {
                 return response.Data;
             }
-
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            else
+            {
+                return null;
+            }
+            
         }
 
         public async Task<BarkodDTO> BarkodGetById(int id)
@@ -42,7 +46,7 @@ namespace BarkodluSatisProgrami1.APIService
                 return response.Data;
             }
 
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            throw new CustomNotFoundException($"{response.ErrorMessage}");
         }
 
         public async Task<bool> BarkodAdd(BarkodDTO barkod)
@@ -55,7 +59,8 @@ namespace BarkodluSatisProgrami1.APIService
                 return response.Data;
             }
 
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            throw new CustomNotFoundException($"{response.ErrorMessage}");
+
         }
 
         public async Task<bool> BarkodUpdate(int id, BarkodDTO barkod)
@@ -68,7 +73,8 @@ namespace BarkodluSatisProgrami1.APIService
                 return response.Data;
             }
 
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            throw new CustomNotFoundException($"{response.ErrorMessage}");
+
         }
 
         public async Task<bool> BarkodDelete(int id)
@@ -80,7 +86,8 @@ namespace BarkodluSatisProgrami1.APIService
             {
                 return response.Data;
             }
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            throw new CustomNotFoundException($"{response.ErrorMessage}");
+
         }
     }
 

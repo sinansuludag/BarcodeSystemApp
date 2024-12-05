@@ -1,4 +1,6 @@
-﻿using BarkodluSatisProgrami1.Models;
+﻿using BarkodluSatisProgrami1.APIService;
+using BarkodluSatisProgrami1.Exceptions;
+using BarkodluSatisProgrami1.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,9 +15,13 @@ namespace BarkodluSatisProgrami1
 {
     public partial class Login : Form
     {
+        KullaniciAPI kullaniciAPI;
+        SabitAPI sabitAPI;
         public Login()
         {
             InitializeComponent();
+            kullaniciAPI = new KullaniciAPI();
+            sabitAPI = new SabitAPI();
         }
 
         private void btnGiris_Click(object sender, EventArgs e)
@@ -23,17 +29,18 @@ namespace BarkodluSatisProgrami1
             GirisYap();
         }
 
-        private void GirisYap()
+        private async void GirisYap()
         {
             if (txtKullaniciAdi.Text != "" && txtSifre.Text != "")
             {
                 try
                 {
-                    using (var db = new DbBarkodEntities())
-                    {
-                        if (db.Kullanicis.Any())
+                    var kullanicis = await kullaniciAPI.KullaniciList();
+                    var sabits=await sabitAPI.SabitList();
+
+                        if (kullanicis!=null && kullanicis.Any())
                         {
-                            var bak = db.Kullanicis.Where(x => x.KullaniciAd == txtKullaniciAdi.Text && x.Sifre == txtSifre.Text).FirstOrDefault();
+                            var bak = kullanicis.Where(x => x.KullaniciAd == txtKullaniciAdi.Text && x.Sifre == txtSifre.Text).FirstOrDefault();
                             if (bak != null)
                             {
                                 Cursor.Current = Cursors.WaitCursor;
@@ -46,8 +53,17 @@ namespace BarkodluSatisProgrami1
                                 anasayfa.btnFiyatGuncelle.Enabled = (bool)bak.FiyatGuncelle;
                                 anasayfa.btnYedekleme.Enabled = (bool)bak.Yedekleme;
                                 anasayfa.lblKullanici.Text = bak.AdSoyad;
-                                var isyeri = db.Sabits.FirstOrDefault();
-                                anasayfa.lblIsyeri.Text = isyeri.Unvan;
+
+                            if (sabits != null)
+                            {
+                                var kullaniciUnvan = sabits.FirstOrDefault(s => s.Id == bak.Id)?.Unvan;
+                                anasayfa.lblIsyeri.Text = kullaniciUnvan;
+                            }
+                            else
+                            {
+                                anasayfa.lblIsyeri.Text = "admin";
+                            }
+                                
                                 anasayfa.Show();
                                 this.Hide();
                                 Cursor.Current = Cursors.Default;
@@ -69,11 +85,15 @@ namespace BarkodluSatisProgrami1
                             txtSifre.Clear();
                             txtKullaniciAdi.Focus();
                         }
-                    }
+                    
+                }
+                catch(CustomNotFoundException ex)
+                {
+                    MessageBox.Show(ex.Message);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Hata :" + ex.Message);
+                    MessageBox.Show("Beklenmedik bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

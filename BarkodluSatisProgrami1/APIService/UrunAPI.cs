@@ -1,4 +1,5 @@
-﻿using BarkodluSatisProgrami1.Models;
+﻿using BarkodluSatisProgrami1.Exceptions;
+using BarkodluSatisProgrami1.Models;
 using BarkodluSatisProgrami1.Models.FormDTO;
 using Newtonsoft.Json;
 using System;
@@ -27,8 +28,8 @@ namespace BarkodluSatisProgrami1.APIService
             {
                 return response.Data;
             }
+            else { return null; }
 
-            throw new Exception($"Hata :{response.ErrorMessage}");
         }
 
         public async Task<UrunDTO> UrunGetById(int id)
@@ -41,7 +42,7 @@ namespace BarkodluSatisProgrami1.APIService
                 return response.Data;
             }
 
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            throw new CustomNotFoundException($"{response.ErrorMessage}");
         }
 
         public async Task<bool> UrunAdd(UrunDTO urun)
@@ -54,7 +55,7 @@ namespace BarkodluSatisProgrami1.APIService
                 return response.Data;
             }
 
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            throw new CustomNotFoundException($"{response.ErrorMessage}");
         }
 
         public async Task<bool> UrunUpdate(int id, UrunDTO urun)
@@ -67,7 +68,7 @@ namespace BarkodluSatisProgrami1.APIService
                 return response.Data;
             }
 
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            throw new CustomNotFoundException($"{response.ErrorMessage}");
         }
 
         public async Task<bool> UrunDelete(int id)
@@ -79,7 +80,7 @@ namespace BarkodluSatisProgrami1.APIService
             {
                 return response.Data;
             }
-            throw new Exception($"Hata :{response.ErrorMessage}");
+            throw new CustomNotFoundException($"{response.ErrorMessage}");
         }
     }
 

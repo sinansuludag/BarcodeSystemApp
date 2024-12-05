@@ -11,29 +11,37 @@ using System.Data.SqlClient;
 using BarkodluSatisProgrami1.Models;
 using BarkodluSatisProgrami1.APIService;
 using BarkodluSatisProgrami1.Models.FormDTO;
+using BarkodluSatisProgrami1.Exceptions;
 
 namespace BarkodluSatisProgrami1
 {
     public partial class UrunGiris : Form
     {
         UrunAPI urunAPI;
+        BarkodAPI barkodAPI;
+        UrunGrupAPI urunGrupAPI;
+        HizliUrunAPI hizliUrunAPI;
         public UrunGiris()
         {
             InitializeComponent();
             urunAPI = new UrunAPI();
+            barkodAPI = new BarkodAPI();
+            urunGrupAPI = new UrunGrupAPI();
+            hizliUrunAPI = new HizliUrunAPI();
         }
 
-        DbBarkodEntities db=new DbBarkodEntities();
+
 
         //Barkod oku varsa güncelle yoksa kaydet
-        private void txtBarkod_KeyDown(object sender, KeyEventArgs e)
+        private async void txtBarkod_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
+                var uruns = await urunAPI.UrunList();
                 string barkod=txtUrunGirisBarkod.Text.Trim();
-                if (db.Uruns.Any(a => a.Barkod == barkod))
+                if (uruns != null && uruns.Any(a => a.Barkod == barkod))
                 {
-                    var urun =db.Uruns.Where(a=>a.Barkod==barkod).SingleOrDefault();
+                    var urun =uruns.Where(a=>a.Barkod==barkod).SingleOrDefault();
                     txtUrunAdi.Text = urun.UrunAd;
                     txtAciklama.Text = urun.Aciklama;
                     cbUrunGrubu.Text = urun.UrunGrup;
@@ -106,30 +114,37 @@ namespace BarkodluSatisProgrami1
                 DialogResult dialog = MessageBox.Show(urunAd + " ürününü silmek istiyor musunuz?", "Ürün silme işlemi", MessageBoxButtons.YesNo);
                 if (dialog == DialogResult.Yes)
                 {
-                    //var urun = db.Uruns.Find(urunId);
-                    //db.Uruns.Remove(urun);
-                    //db.SaveChanges();
                     try
                     {
-                        var result = await urunAPI.UrunDelete(urunId);
+                        await urunAPI.UrunDelete(urunId);
                         MessageBox.Show("Ürün silinmiştir");
+
+                        var hizliUruns = await hizliUrunAPI.HizliUrunList();
+                        if (hizliUruns != null)
+                        {
+                            var hizliUrun = hizliUruns.Where(a => a.Barkod == barkod).SingleOrDefault();
+                            hizliUrun.Barkod = "-";
+                            hizliUrun.UrunAd = "-";
+                            hizliUrun.Fiyat = 0;
+                            await hizliUrunAPI.HizliUrunUpdate(urunId, hizliUrun);
+                        }
+
+
+
+                        gridUrunler.DataSource = await urunAPI.UrunList();
+                        Islemler.GridDuzenle(gridUrunler);
+                        txtUrunGirisBarkod.Focus();
+                    }
+                    catch (CustomNotFoundException ex)
+                    {
+                        MessageBox.Show(ex.Message);
                     }
                     catch(Exception ex)
                     {
                         MessageBox.Show($"Ürün silinmedi ,HATA :{ex.Message}");
                     }
 
-                    //var hizliUrun = db.HizliUruns.Where(a => a.Barkod == barkod).SingleOrDefault();
-                    //hizliUrun.Barkod = "-";
-                    //hizliUrun.UrunAd = "-";
-                    //hizliUrun.Fiyat = 0;
-                    //db.SaveChanges();
-
-                    
-                    //gridUrunler.DataSource = db.Uruns.OrderByDescending(a => a.UrunId).Take(20).ToList();
-                    gridUrunler.DataSource =await urunAPI.UrunList();
-                    Islemler.GridDuzenle(gridUrunler);
-                    txtUrunGirisBarkod.Focus();
+                   
                 }
             }
             
@@ -140,7 +155,8 @@ namespace BarkodluSatisProgrami1
             if (txtUrunGirisBarkod.Text != "" && txtUrunAdi.Text != "" && cbUrunGrubu.Text != "" && txtAlisFiyati.Text != "" && txtSatisFiyati.Text != "" && txtKdvOrani.Text != "" && txtMiktar.Text != "")
             {
                 var uruns=await urunAPI.UrunList();
-                if (uruns.Any(a => a.Barkod == txtUrunGirisBarkod.Text))
+                //APIde barkoda gore getir fonkunu ekleyebiliriz(id dışında)
+                if (uruns!=null && uruns.Any(a => a.Barkod == txtUrunGirisBarkod.Text))
                 {
                     var guncelle = uruns.Where(a => a.Barkod == txtUrunGirisBarkod.Text).SingleOrDefault();
                     guncelle.UrunAd = txtUrunAdi.Text;
@@ -163,11 +179,15 @@ namespace BarkodluSatisProgrami1
                     guncelle.Kullanici = lblKullanici.Text;
                     try
                     {
-                        var result = await urunAPI.UrunUpdate(guncelle.UrunId, guncelle);
+                        await urunAPI.UrunUpdate(guncelle.UrunId, guncelle);
 
                         MessageBox.Show("Ürün güncellenmiştir");
                         gridUrunler.DataSource = await urunAPI.UrunList();
 
+                    }
+                    catch (CustomNotFoundException ex)
+                    {
+                        MessageBox.Show(ex.Message); 
                     }
                     catch(Exception ex)
                     {
@@ -180,7 +200,7 @@ namespace BarkodluSatisProgrami1
                 }
                 else
                 {
-                    BarkodDTO urun = new BarkodDTO();
+                    UrunDTO urun = new UrunDTO();
                     urun.Barkod = txtUrunGirisBarkod.Text;
                     urun.UrunAd = txtUrunAdi.Text;
                     urun.Aciklama = txtAciklama.Text;
@@ -200,30 +220,48 @@ namespace BarkodluSatisProgrami1
                     }
                     urun.Tarih = DateTime.Now;
                     urun.Kullanici = lblKullanici.Text;
-                    //db.Uruns.Add(urun);
-                    //db.SaveChanges();
                     try
                     {
-                        var result = await urunAPI.UrunEkle(urun);
+                        await urunAPI.UrunAdd(urun);
                         MessageBox.Show("Ürün eklenmiştir.");
                         if (txtUrunGirisBarkod.Text.Length == 8)
                         {
-                            //var ozelBarkod = db.Barkods.First();
-                            //ozelBarkod.BarkodNo += 1;
-                            //db.SaveChanges();
+                            var ozelBarkod =await barkodAPI.BarkodList();
+                            if (ozelBarkod!=null && ozelBarkod.Count == 1)
+                            {
+                                var id = ozelBarkod[0].Id;
+                                var barkodNo=ozelBarkod[0].BarkodNo++;
+                                BarkodDTO barkodDTO = new BarkodDTO();
+                                barkodDTO.BarkodNo= barkodNo;
+                                await barkodAPI.BarkodUpdate(id,barkodDTO);
+                            }
+                            else if (ozelBarkod ==null)
+                            {
+                                BarkodDTO barkodDTO=new BarkodDTO();
+                                barkodDTO.BarkodNo = 1;
+                                await barkodAPI.BarkodAdd(barkodDTO);
+                            }
                         }
+
+                        gridUrunler.DataSource = await urunAPI.UrunList();
+
                     }
+                    catch(CustomNotFoundException ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+
                     catch(Exception ex)
                     {
-                        MessageBox.Show($"Ürün eklenmedi ,HATA:{ex.Message}.");
+                        MessageBox.Show("Beklenmedik bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                   
 
                     //gridUrunler.DataSource = db.Uruns.OrderByDescending(a => a.UrunId).Take(20).ToList();
-                    gridUrunler.DataSource =await urunAPI.UrunList();
+                    
                     Islemler.GridDuzenle(gridUrunler);
                 }
-                Islemler.StokHareket(txtUrunGirisBarkod.Text, txtUrunAdi.Text, "Adet", Convert.ToDouble(txtMiktar.Text), cbUrunGrubu.Text, lblKullanici.Text);
+                Islemler.StokHareketAsync(txtUrunGirisBarkod.Text, txtUrunAdi.Text, "Adet", Convert.ToDouble(txtMiktar.Text), cbUrunGrubu.Text, lblKullanici.Text);
                 Temizle();
             }
             else
@@ -233,47 +271,99 @@ namespace BarkodluSatisProgrami1
             }
         }
 
-        private void txtUrunAra_TextChanged(object sender, EventArgs e)
-        {
-            if(txtUrunAra.Text.Length > 2)
-            {
-                string urunAd=txtUrunAra.Text;
-                gridUrunler.DataSource=db.Uruns.Where(a=>a.UrunAd.Contains(urunAd)).ToList();
-                Islemler.GridDuzenle(gridUrunler);
-            }
-        }
+
 
         private async void UrunGiris_Load(object sender, EventArgs e)
         {
-           
-            var urunList =await urunAPI.UrunList();
-
-            txtUrunSayisi.Text=urunList.Count.ToString();
-            //gridUrunler.DataSource = db.Uruns.OrderByDescending(a => a.UrunId).Take(20).ToList();
-            gridUrunler.DataSource = urunList;
-            Islemler.GridDuzenle(gridUrunler) ;
-            GrupDoldur();
-        }
-
-        public void GrupDoldur()
-        {
-            cbUrunGrubu.DisplayMember = "UrunGrupAd";
-            cbUrunGrubu.ValueMember = "Id";
-            cbUrunGrubu.DataSource = db.UrunGrups.OrderBy(a => a.UrunGrupAd).ToList();
-        }
-
-        private void btnBarkodOlustur_Click(object sender, EventArgs e)
-        {
-            var barkodno=db.Barkods.First();
-            int karakter=barkodno.BarkodNo.ToString().Length;
-            string sifirlar=string.Empty;
-            for(int i = 0; i < 8 - karakter; i++)
+            
+            try
             {
-                sifirlar = sifirlar + "0";
+                var urunList = await urunAPI.UrunList();
+                if (urunList == null)
+                    txtUrunSayisi.Text = "0";
+                else
+                    txtUrunSayisi.Text = urunList.Count.ToString();
+
+                gridUrunler.DataSource = urunList;
+                Islemler.GridDuzenle(gridUrunler);
+                GrupDoldur();
             }
-            string olusanBarkod = sifirlar + barkodno.BarkodNo.ToString();
-            txtUrunGirisBarkod.Text = olusanBarkod;
-            txtUrunAdi.Focus();
+            catch (CustomNotFoundException ex) // Özel exception için
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex) // Diğer genel hatalar için
+            {
+                MessageBox.Show("Beklenmedik bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        public async void GrupDoldur()
+        {
+            try
+            {
+                var urunGrups = await urunGrupAPI.UrunGrupList();
+                cbUrunGrubu.DisplayMember = "UrunGrupAd";
+                cbUrunGrubu.ValueMember = "Id";
+                if (urunGrups == null)
+                {
+                    cbUrunGrubu.DataSource = null;
+                }     
+                else
+                {
+                    cbUrunGrubu.DataSource = urunGrups.OrderBy(a => a.UrunGrupAd).ToList();
+                    cbUrunGrubu.SelectedIndex = 0;
+                }
+                   
+
+            }
+            catch (CustomNotFoundException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Beklenmedik bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
+        }
+
+        private async void btnBarkodOlustur_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var barkods = await barkodAPI.BarkodList();
+                if (barkods !=null && barkods.Count == 1)
+                {
+                    var barkodno = barkods[0].BarkodNo;
+                    int karakter = barkodno.ToString().Length;
+                    string sifirlar = string.Empty;
+                    for (int i = 0; i < 8 - karakter; i++)
+                    {
+                        sifirlar = sifirlar + "0";
+                    }
+                    string olusanBarkod = sifirlar + barkodno.ToString();
+                    txtUrunGirisBarkod.Text = olusanBarkod;
+                    txtUrunAdi.Focus();
+                }
+                else if (barkods==null)
+                {
+                    BarkodDTO barkodDTO = new BarkodDTO();
+                    barkodDTO.BarkodNo = 1;
+                    await barkodAPI.BarkodAdd(barkodDTO);
+                }
+            }
+            catch (CustomNotFoundException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Beklenmedik bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+           
+              
         }
 
         private void chUrunTipi_CheckedChanged(object sender, EventArgs e)
@@ -317,6 +407,37 @@ namespace BarkodluSatisProgrami1
         private void btnRaporAl_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private async void txtUrunAra_TextChanged(object sender, EventArgs e)
+        {
+
+            if (txtUrunAra.Text.Length > 2)
+            {
+                try
+                {
+                    var uruns = await urunAPI.UrunList();
+                    string urunAd = txtUrunAra.Text;
+                    if(uruns!=null)
+                    {
+                        gridUrunler.DataSource = uruns.Where(a => a.UrunAd.Contains(urunAd)).ToList();
+                    }
+                    else
+                    {
+                        gridUrunler.DataSource = null;
+                    }
+                    
+                    Islemler.GridDuzenle(gridUrunler);
+                }
+                catch(CustomNotFoundException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Beklenmedik bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }
