@@ -203,12 +203,18 @@ namespace BarkodluSatisProgrami1
                     gridListeKullanici.DataSource = kullanicis.Select(x => new { x.Id, x.AdSoyad, x.KullaniciAd, x.Telefon }).ToList();
                    
                 }
-                Islemler.SabitVarsayilan(sabitAPI);
+
                 var sabits=await sabitAPI.SabitList();
-                var yazici = sabits.FirstOrDefault();
+            if (sabits == null)
+            {
+               Islemler.SabitVarsayilan(sabitAPI);
+            }
+
+            var sabitGetir = await sabitAPI.SabitList();
+                var yazici = sabitGetir.FirstOrDefault();
                 chYazmaDurumu.Checked = (bool)yazici.Yazici;
 
-                var sabitler=sabits.FirstOrDefault();
+                var sabitler= sabitGetir.FirstOrDefault();
                 txtKartKomisyon.Text = sabitler.KartKomisyon.ToString();
                
                 var terazis=await teraziAPI.TeraziList();
@@ -239,21 +245,47 @@ namespace BarkodluSatisProgrami1
             {
                 if (chYazmaDurumu.Checked)
                 {
-                    Islemler.SabitVarsayilan(sabitAPI);
+                    
                     var sabits = await sabitAPI.SabitList();
-                    var sabit = sabits.FirstOrDefault();
-                    sabit.Yazici = true;
-                    await sabitAPI.SabitUpdate(sabit.Id, sabit);
-                    chYazmaDurumu.Text = "Yazma Durumu AKTİF";
+                    if(sabits!=null && sabits.Any())
+                    {
+                        var sabit = sabits.FirstOrDefault();
+                        sabit.Yazici = true;
+                        await sabitAPI.SabitUpdate(sabit.Id, sabit);
+                        chYazmaDurumu.Text = "Yazma Durumu AKTİF";
+                    }
+                    else
+                    {
+                        Islemler.SabitVarsayilan(sabitAPI);
+                        var sabitsGetir= await sabitAPI.SabitList();
+                        var sabit = sabitsGetir.FirstOrDefault();
+                        sabit.Yazici = true;
+                        await sabitAPI.SabitUpdate(sabit.Id, sabit);
+                        chYazmaDurumu.Text = "Yazma Durumu AKTİF";
+                    }
+                    
                 }
                 else
                 {
-                    Islemler.SabitVarsayilan(sabitAPI);
+                    
                     var sabits = await sabitAPI.SabitList();
-                    var sabit = sabits.FirstOrDefault();
-                    sabit.Yazici = false;
-                    await sabitAPI.SabitUpdate(sabit.Id, sabit);
-                    chYazmaDurumu.Text = "Yazma Durumu PASİF";
+                    if(sabits!=null && sabits.Any())
+                    {
+                        var sabit = sabits.FirstOrDefault();
+                        sabit.Yazici = false;
+                        await sabitAPI.SabitUpdate(sabit.Id, sabit);
+                        chYazmaDurumu.Text = "Yazma Durumu PASİF";
+                    }
+                    else
+                    {
+                        Islemler.SabitVarsayilan(sabitAPI);
+                        var sabitsGetir=await sabitAPI.SabitList();
+                        var sabit = sabitsGetir.FirstOrDefault();
+                        sabit.Yazici = false;
+                        await sabitAPI.SabitUpdate(sabit.Id, sabit);
+                        chYazmaDurumu.Text = "Yazma Durumu PASİF";
+                    }
+                    
                 }
             }
             catch(CustomNotFoundException ex)
@@ -380,15 +412,17 @@ namespace BarkodluSatisProgrami1
             {
                     var sabits=await sabitAPI.SabitList();
                     var isyeri = sabits.FirstOrDefault();
-                    isyeri.AdSoyad = txtAdSoyad.Text;
+                    isyeri.AdSoyad = txtIsyeriAdSoyad.Text;
                     isyeri.Unvan = txtIsyeriUnvan.Text;
                     isyeri.Adres = txtIsyeriAdres.Text;
                     isyeri.Telefon = msIsyeriTelefon.Text;
-                    isyeri.Eposta = txtEposta.Text;
+                    isyeri.Eposta = txtIsyeriEposta.Text;
+
                 await sabitAPI.SabitUpdate(isyeri.Id, isyeri);
                     MessageBox.Show("İşyeri bilgileri kaydedilmiştir");
-                    
-                    var yeni=sabits.FirstOrDefault();
+
+                var sabitGetir = await sabitAPI.SabitList();
+                    var yeni= sabitGetir.FirstOrDefault();
                     txtAdSoyad.Text = yeni.AdSoyad;
                     txtIsyeriUnvan.Text= yeni.Unvan;
                     txtIsyeriAdres.Text= yeni.Adres;
@@ -405,18 +439,17 @@ namespace BarkodluSatisProgrami1
             Application.Exit();
         }
 
-        private void btnIptal_Click(object sender, EventArgs e)
+        private async void btnIptal_Click(object sender, EventArgs e)
         {
             MessageBox.Show("İşlem iptal edildi");
-            using (var db = new DbBarkodEntities())
-            {
-                var yeni = db.Sabits.FirstOrDefault();
+                var sabits=await sabitAPI.SabitList();
+                var yeni = sabits.FirstOrDefault();
                 txtAdSoyad.Text = yeni.AdSoyad;
                 txtIsyeriUnvan.Text = yeni.Unvan;
                 txtIsyeriAdres.Text = yeni.Adres;
                 msIsyeriTelefon.Text = yeni.Telefon;
                 txtEposta.Text = yeni.Eposta;
-            }
+
         }
     }
 }

@@ -158,7 +158,7 @@ namespace BarkodluSatisProgrami1
 
             var hizliUrun=await hizliUrunAPI.HizliUrunList();
 
-            foreach(var item in hizliUrun)
+                foreach(var item in hizliUrun)
             {
                 Button bH=this.Controls.Find("bH"+item.Id,true).FirstOrDefault() as Button;
                 if(bH != null)
@@ -415,6 +415,9 @@ namespace BarkodluSatisProgrami1
                 if (islems == null)
                 {
                     islemNo = 1;
+                    IslemDTO islemDTO = new IslemDTO();
+                    islemDTO.IslemNo = 1;
+                    await islemAPI.IslemAdd(islemDTO);
                 }
                 else
                 {
@@ -503,7 +506,8 @@ namespace BarkodluSatisProgrami1
 
                 await islemOzetAPI.IslemOzetAdd(io);
 
-                var islemNoArttir=islems.First();
+                var islemGetir = await islemAPI.IslemList();
+                var islemNoArttir= islemGetir.First();
                 islemNoArttir.IslemNo += 1;
                 await islemAPI.IslemUpdate(islemNoArttir.Id,islemNoArttir);
                 if (chYazdirmaDurumu.Checked)
